@@ -13,6 +13,7 @@ import Tarefas from "./pages/Tarefas";
 import Relatorios from "./pages/Relatorios";
 import Configuracoes from "./pages/Configuracoes";
 import Vendas from "./pages/Vendas";
+import BI from "./pages/BI";
 import EmptyPage from "./pages/EmptyPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -29,6 +30,7 @@ function AppRoutes() {
       <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<BI />} />
         <Route path="/cliente" element={<Clients />} />
         <Route path="/empresas" element={<Empresas />} />
         <Route path="/negocios" element={<Deals />} />

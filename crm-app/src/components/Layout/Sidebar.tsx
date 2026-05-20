@@ -12,6 +12,7 @@ import {
   IconReportAnalytics,
   IconSettings,
   IconChartDots,
+  IconChartLine,
 } from "@tabler/icons-react";
 
   const navSections = [
@@ -37,6 +38,7 @@ import {
       label: "Análise",
       items: [
         { to: "/relatorios", label: "Relatórios", icon: IconReportAnalytics },
+        { to: "/dashboard", label: "Indicadores", icon: IconChartLine },
         { to: "/configuracoes", label: "Configurações", icon: IconSettings },
       ],
     },
