@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { Deal, DealStage } from "../types/deal";
 import { stageLabels } from "../types/deal";
+import { useData } from "../contexts/DataContext";
 
 interface Props {
   open: boolean;
@@ -18,6 +19,7 @@ const emptyForm: Omit<Deal, "id" | "createdAt"> = {
 };
 
 export default function DealFormModal({ open, deal, onClose, onSave }: Props) {
+  const { clients, companies } = useData();
   const [form, setForm] = useState(emptyForm);
 
   useEffect(() => {
@@ -28,6 +30,8 @@ export default function DealFormModal({ open, deal, onClose, onSave }: Props) {
         value: deal.value,
         stage: deal.stage,
         contactName: deal.contactName,
+        clientId: deal.clientId,
+        companyId: deal.companyId,
       });
     } else {
       setForm(emptyForm);
@@ -44,6 +48,20 @@ export default function DealFormModal({ open, deal, onClose, onSave }: Props) {
 
   const isValid = form.title.trim() && form.company.trim();
 
+  function onClientSelect(clientId: string) {
+    const client = clients.find((c) => c.id === clientId);
+    if (client) {
+      setForm({ ...form, clientId, contactName: client.name });
+    }
+  }
+
+  function onCompanySelect(companyId: string) {
+    const company = companies.find((c) => c.id === companyId);
+    if (company) {
+      setForm({ ...form, companyId, company: company.nomeFantasia });
+    }
+  }
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -55,43 +73,35 @@ export default function DealFormModal({ open, deal, onClose, onSave }: Props) {
           <div className="modal-body">
             <label>
               Título *
-              <input
-                value={form.title}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
-                placeholder="Site institucional"
-              />
+              <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Site institucional" />
             </label>
-            <label>
-              Empresa *
-              <input
-                value={form.company}
-                onChange={(e) => setForm({ ...form, company: e.target.value })}
-                placeholder="Nome da empresa"
-              />
-            </label>
+            <div className="modal-row">
+              <label>
+                Cliente
+                <select value={form.clientId || ""} onChange={(e) => onClientSelect(e.target.value)}>
+                  <option value="">Selecione um cliente</option>
+                  {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </select>
+              </label>
+              <label>
+                Empresa
+                <select value={form.companyId || ""} onChange={(e) => onCompanySelect(e.target.value)}>
+                  <option value="">Selecione uma empresa</option>
+                  {companies.map((c) => <option key={c.id} value={c.id}>{c.nomeFantasia}</option>)}
+                </select>
+              </label>
+            </div>
             <label>
               Contato
-              <input
-                value={form.contactName}
-                onChange={(e) => setForm({ ...form, contactName: e.target.value })}
-                placeholder="Nome do contato"
-              />
+              <input value={form.contactName} onChange={(e) => setForm({ ...form, contactName: e.target.value })} placeholder="Nome do contato" />
             </label>
             <label>
-              Valor
-              <input
-                type="number"
-                value={form.value || ""}
-                onChange={(e) => setForm({ ...form, value: Number(e.target.value) })}
-                placeholder="15000"
-              />
+              Valor (R$)
+              <input type="number" value={form.value || ""} onChange={(e) => setForm({ ...form, value: Number(e.target.value) })} placeholder="15000" />
             </label>
             <label>
               Estágio
-              <select
-                value={form.stage}
-                onChange={(e) => setForm({ ...form, stage: e.target.value as DealStage })}
-              >
+              <select value={form.stage} onChange={(e) => setForm({ ...form, stage: e.target.value as DealStage })}>
                 {Object.entries(stageLabels).map(([key, label]) => (
                   <option key={key} value={key}>{label}</option>
                 ))}
@@ -99,12 +109,8 @@ export default function DealFormModal({ open, deal, onClose, onSave }: Props) {
             </label>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-primary" disabled={!isValid}>
-              {deal ? "Salvar" : "Criar"}
-            </button>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
+            <button type="submit" className="btn btn-primary" disabled={!isValid}>{deal ? "Salvar" : "Criar"}</button>
           </div>
         </form>
       </div>

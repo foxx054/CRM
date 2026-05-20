@@ -1,0 +1,98 @@
+.tarefas-page {
+  max-width: 700px;
+}
+
+.task-form {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.task-form input {
+  flex: 1;
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+}
+
+.task-form input:focus {
+  border-color: var(--accent);
+}
+
+.task-form input::placeholder {
+  color: var(--text-muted);
+}
+
+.task-section {
+  margin-bottom: 24px;
+}
+
+.task-section h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 4px;
+}
+
+.task-check {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.task-check input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+}
+
+.task-title {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.task-row.done .task-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-related {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.task-del {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--text-muted);
+  border-radius: 4px;
+}
+
+.task-del:hover {
+  color: var(--danger);
+  background: var(--bg-tertiary);
+}

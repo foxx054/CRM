@@ -1,0 +1,188 @@
+.config-page {
+  max-width: 800px;
+}
+
+.config-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  border-bottom: 0.5px solid var(--border);
+  padding-bottom: 0;
+}
+
+.config-tab {
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -0.5px;
+}
+
+.config-tab:hover {
+  color: var(--text-primary);
+}
+
+.config-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 500;
+}
+
+.config-content {
+  margin-top: 20px;
+}
+
+.config-form {
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.config-form h2 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.config-form h3 {
+  font-size: 14px;
+  margin: 16px 0 12px;
+}
+
+.config-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.config-form input,
+.config-form select {
+  background: var(--bg-tertiary);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+}
+
+.config-form input:focus {
+  border-color: var(--accent);
+}
+
+.config-form input:disabled {
+  opacity: 0.5;
+}
+
+.config-msg {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--success);
+}
+
+.config-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.config-inline-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: end;
+}
+
+.config-inline-form button {
+  margin-bottom: 14px;
+  height: 36px;
+}
+
+.config-user-list {
+  margin-bottom: 16px;
+}
+
+.config-user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 0.5px solid var(--border);
+  gap: 8px;
+}
+
+.config-user-name-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  color: var(--text-primary);
+}
+
+.config-user-name-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+.config-user-name-btn strong {
+  display: block;
+  font-size: 13px;
+}
+
+.config-user-info {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.config-back-bar {
+  margin-bottom: 12px;
+}
+
+.config-user-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 8px 0;
+}
+
+.config-stage-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.config-stage-row input[type="color"] {
+  width: 60px;
+  height: 36px;
+  padding: 2px;
+}
+
+.config-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.config-about p {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.config-about .config-hint {
+  font-size: 13px;
+}
+
+hr {
+  border: none;
+  border-top: 0.5px solid var(--border);
+  margin: 16px 0;
+}

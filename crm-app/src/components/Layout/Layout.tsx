@@ -4,7 +4,9 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import SearchModal from "../SearchModal";
+import Notificacoes from "../Notificacoes";
 import "../SearchModal.css";
+import "../Notificacoes.css";
 import { IconSearch, IconPlus, IconLogout, IconMoon, IconSun } from "@tabler/icons-react";
 import "./Layout.css";
 
@@ -15,8 +17,8 @@ const pageTitles: Record<string, string> = {
   "/negocios": "Negócios",
   "/pipeline": "Pipeline",
   "/tarefas": "Tarefas",
-  "/agenda": "Agenda",
   "/relatorios": "Relatórios",
+  "/agenda": "Agenda",
   "/configuracoes": "Configurações",
 };
 
@@ -40,6 +42,7 @@ export default function Layout() {
               Buscar... <span className="search-hint">Ctrl+K</span>
             </div>
             <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+            <Notificacoes />
             <button className="btn btn-primary" onClick={() => navigate("/negocios", { state: { novoNegocio: true } })}>
               <IconPlus size={16} />
               Novo negócio

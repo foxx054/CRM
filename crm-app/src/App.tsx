@@ -1,14 +1,17 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { DataProvider } from "./contexts/DataContext";
 import Layout from "./components/Layout/Layout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Clients from "./pages/Clients";
-import Deals from "./pages/Deals";
-import Tasks from "./pages/Tasks";
-import Pipeline from "./pages/Pipeline";
 import Empresas from "./pages/Empresas";
+import Deals from "./pages/Deals";
+import Pipeline from "./pages/Pipeline";
+import Tarefas from "./pages/Tarefas";
+import Relatorios from "./pages/Relatorios";
+import Configuracoes from "./pages/Configuracoes";
 import EmptyPage from "./pages/EmptyPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -29,10 +32,10 @@ function AppRoutes() {
         <Route path="/empresas" element={<Empresas />} />
         <Route path="/negocios" element={<Deals />} />
         <Route path="/pipeline" element={<Pipeline />} />
-        <Route path="/tarefas" element={<Tasks />} />
+        <Route path="/tarefas" element={<Tarefas />} />
+        <Route path="/relatorios" element={<Relatorios />} />
         <Route path="/agenda" element={<EmptyPage title="Agenda" />} />
-        <Route path="/relatorios" element={<EmptyPage title="Relatórios" />} />
-        <Route path="/configuracoes" element={<EmptyPage title="Configurações" />} />
+        <Route path="/configuracoes" element={<Configuracoes />} />
       </Route>
     </Routes>
   );
@@ -43,7 +46,9 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <AppRoutes />
+          <DataProvider>
+            <AppRoutes />
+          </DataProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

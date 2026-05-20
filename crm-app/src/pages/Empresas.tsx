@@ -1,29 +1,12 @@
 import { useState } from "react";
 import type { Company } from "../types/company";
+import { useData } from "../contexts/DataContext";
 import CompanyFormModal from "../components/CompanyFormModal";
 import "../components/ClientFormModal.css";
 import "./Empresas.css";
 
-const initialCompanies: Company[] = [
-  {
-    id: "1",
-    nomeFantasia: "Lojas Becker",
-    razaoSocial: "LOJAS BECKER LTDA",
-    cnpj: "90.518.362/0001-70",
-    segmento: "Varejo",
-    areasAtuacao: "móveis, eletrodomésticos, informática, telefonia, materiais de construção",
-    site: "https://www.lojasbecker.com.br",
-    telefone: "(55) 3359-3500",
-    cidade: "Cerro Largo",
-    estado: "Rio Grande do Sul",
-    pais: "Brasil",
-    status: "active",
-    createdAt: "2025-01-01",
-  },
-];
-
 export default function Empresas() {
-  const [companies, setCompanies] = useState<Company[]>(initialCompanies);
+  const { companies, setCompanies } = useData();
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCompany, setEditingCompany] = useState<Company | null>(null);
@@ -36,9 +19,7 @@ export default function Empresas() {
 
   function handleSave(data: Omit<Company, "id" | "createdAt">) {
     if (editingCompany) {
-      setCompanies((prev) =>
-        prev.map((c) => (c.id === editingCompany.id ? { ...c, ...data } : c))
-      );
+      setCompanies((prev) => prev.map((c) => (c.id === editingCompany.id ? { ...c, ...data } : c)));
     } else {
       const newCompany: Company = {
         id: crypto.randomUUID(),
@@ -55,15 +36,8 @@ export default function Empresas() {
     }
   }
 
-  function openEdit(company: Company) {
-    setEditingCompany(company);
-    setModalOpen(true);
-  }
-
-  function openCreate() {
-    setEditingCompany(null);
-    setModalOpen(true);
-  }
+  function openEdit(company: Company) { setEditingCompany(company); setModalOpen(true); }
+  function openCreate() { setEditingCompany(null); setModalOpen(true); }
 
   return (
     <div className="empresas-page">
@@ -72,17 +46,11 @@ export default function Empresas() {
           <h1>Empresas</h1>
           <p className="subtitle">{companies.length} empresas cadastradas</p>
         </div>
-        <button className="btn btn-primary" onClick={openCreate}>
-          + Nova Empresa
-        </button>
+        <button className="btn btn-primary" onClick={openCreate}>+ Nova Empresa</button>
       </div>
 
       <div className="search-bar">
-        <input
-          placeholder="Buscar por nome fantasia, razão social, CNPJ, cidade..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <input placeholder="Buscar por nome fantasia, razão social, CNPJ, cidade..." value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
 
       <div className="table-wrapper">
@@ -121,21 +89,12 @@ export default function Empresas() {
                 </td>
               </tr>
             ))}
-            {filtered.length === 0 && (
-              <tr>
-                <td colSpan={9} className="empty">Nenhuma empresa encontrada</td>
-              </tr>
-            )}
+            {filtered.length === 0 && <tr><td colSpan={9} className="empty">Nenhuma empresa encontrada</td></tr>}
           </tbody>
         </table>
       </div>
 
-      <CompanyFormModal
-        open={modalOpen}
-        company={editingCompany}
-        onClose={() => setModalOpen(false)}
-        onSave={handleSave}
-      />
+      <CompanyFormModal open={modalOpen} company={editingCompany} onClose={() => setModalOpen(false)} onSave={handleSave} />
     </div>
   );
 }

@@ -13,6 +13,8 @@ export interface Deal {
   stage: DealStage;
   contactName: string;
   createdAt: string;
+  clientId?: string;
+  companyId?: string;
 }
 
 export const stageLabels: Record<DealStage, string> = {

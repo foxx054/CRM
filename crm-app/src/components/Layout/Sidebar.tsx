@@ -42,9 +42,9 @@ import {
 
 export default function Sidebar() {
   const { user } = useAuth();
-  const initials = user?.username
-    ? user.username.substring(0, 2).toUpperCase()
-    : "??";
+  const initials = user?.name
+    ? user.name.substring(0, 2).toUpperCase()
+    : user?.username.substring(0, 2).toUpperCase() ?? "??";
 
   return (
     <aside className="sidebar">
@@ -75,7 +75,8 @@ export default function Sidebar() {
         <div className="user-chip">
           <div className="user-avatar">{initials}</div>
           <div className="user-info">
-            <p>{user?.username}</p>
+            <p>{user?.name}</p>
+          <span>{user?.role}</span>
           </div>
         </div>
       </div>
