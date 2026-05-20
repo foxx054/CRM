@@ -113,7 +113,7 @@ export default function Pipeline() {
                   <span className="pl-stage-dot" style={{ background: stageColors[s.stage] }} />
                   {stageLabels[s.stage]}
                 </div>
-                <div className="pl-stage-total">{s.stage === "atendimento" ? `${s.deals.length} contato${s.deals.length !== 1 ? "s" : ""}` : formatCurrency(s.total)}</div>
+                <div className="pl-stage-total">{s.stage === "atendimento" ? `${s.deals.length} cliente${s.deals.length !== 1 ? "s" : ""}` : formatCurrency(s.total)}</div>
               </div>
               <div className="pl-bar-bg">
                 <div
@@ -179,7 +179,7 @@ export default function Pipeline() {
                 <span className="pl-stage-dot" style={{ background: stageColors[s.stage] }} />
                 {stageLabels[s.stage]}
               </span>
-              <span>{s.deals.length} negócio{s.deals.length !== 1 ? "s" : ""} · {s.stage === "atendimento" ? `${s.deals.length} contato${s.deals.length !== 1 ? "s" : ""}` : formatCurrency(s.total)}</span>
+              <span>{s.deals.length} negócio{s.deals.length !== 1 ? "s" : ""} · {s.stage === "atendimento" ? `${s.deals.length} cliente${s.deals.length !== 1 ? "s" : ""}` : formatCurrency(s.total)}</span>
             </summary>
             <div className="pl-details-body">
               {s.deals.map((deal) => (
