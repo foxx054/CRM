@@ -10,6 +10,7 @@ interface Props {
 
 const emptyForm: Omit<Client, "id" | "createdAt"> = {
   name: "",
+  cpf: "",
   email: "",
   phone: "",
   company: "",
@@ -23,6 +24,7 @@ export default function ClientFormModal({ open, client, onClose, onSave }: Props
     if (client) {
       setForm({
         name: client.name,
+        cpf: client.cpf,
         email: client.email,
         phone: client.phone,
         company: client.company,
@@ -58,6 +60,14 @@ export default function ClientFormModal({ open, client, onClose, onSave }: Props
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="Nome completo"
+              />
+            </label>
+            <label>
+              CPF
+              <input
+                value={form.cpf}
+                onChange={(e) => setForm({ ...form, cpf: e.target.value })}
+                placeholder="000.000.000-00"
               />
             </label>
             <label>

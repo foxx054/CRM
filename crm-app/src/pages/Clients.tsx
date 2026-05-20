@@ -5,9 +5,9 @@ import "../components/ClientFormModal.css";
 import "./Clients.css";
 
 const initialClients: Client[] = [
-  { id: "1", name: "João Silva", email: "joao@exemplo.com", phone: "(11) 99999-0001", company: "Tech Ltda", status: "active", createdAt: "2025-01-15" },
-  { id: "2", name: "Maria Souza", email: "maria@exemplo.com", phone: "(11) 99999-0002", company: "Design Studio", status: "lead", createdAt: "2025-03-20" },
-  { id: "3", name: "Carlos Pereira", email: "carlos@exemplo.com", phone: "(11) 99999-0003", company: "Construtora ABC", status: "inactive", createdAt: "2025-02-10" },
+  { id: "1", name: "João Silva", cpf: "529.982.247-25", email: "joao@exemplo.com", phone: "(11) 99999-0001", company: "Tech Ltda", status: "active", createdAt: "2025-01-15" },
+  { id: "2", name: "Maria Souza", cpf: "384.561.739-10", email: "maria@exemplo.com", phone: "(11) 99999-0002", company: "Design Studio", status: "lead", createdAt: "2025-03-20" },
+  { id: "3", name: "Carlos Pereira", cpf: "176.438.902-55", email: "carlos@exemplo.com", phone: "(11) 99999-0003", company: "Construtora ABC", status: "inactive", createdAt: "2025-02-10" },
 ];
 
 function formatDate(dateStr: string) {
@@ -21,7 +21,7 @@ export default function Clients() {
   const [editingClient, setEditingClient] = useState<Client | null>(null);
 
   const filtered = clients.filter((c) =>
-    [c.name, c.email, c.company, c.phone].some((field) =>
+    [c.name, c.cpf, c.email, c.company, c.phone].some((field) =>
       field.toLowerCase().includes(search.toLowerCase())
     )
   );
@@ -88,6 +88,7 @@ export default function Clients() {
           <thead>
             <tr>
               <th>Nome</th>
+              <th>CPF</th>
               <th>Email</th>
               <th>Telefone</th>
               <th>Empresa</th>
@@ -100,6 +101,7 @@ export default function Clients() {
             {filtered.map((client) => (
               <tr key={client.id}>
                 <td className="cell-name">{client.name}</td>
+                <td className="cell-cpf">{client.cpf}</td>
                 <td>{client.email}</td>
                 <td>{client.phone}</td>
                 <td>{client.company}</td>
@@ -121,7 +123,7 @@ export default function Clients() {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="empty">
+                <td colSpan={8} className="empty">
                   Nenhum cliente encontrado
                 </td>
               </tr>

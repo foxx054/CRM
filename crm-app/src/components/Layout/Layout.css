@@ -171,6 +171,18 @@
   background: #134b86;
 }
 
+.btn-logout {
+  background: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  gap: 4px;
+}
+
+.btn-logout:hover {
+  color: var(--danger);
+  background: none;
+}
+
 /* ── Content ── */
 .content {
   padding: 18px 20px;
