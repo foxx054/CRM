@@ -42,7 +42,7 @@ export default function DealFormModal({ open, deal, onClose, onSave }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(form);
+    onSave({ ...form, value: form.stage === "atendimento" ? 0 : form.value });
     onClose();
   };
 
@@ -97,11 +97,12 @@ export default function DealFormModal({ open, deal, onClose, onSave }: Props) {
             </label>
             <label>
               Valor (R$)
-              <input type="number" value={form.value || ""} onChange={(e) => setForm({ ...form, value: Number(e.target.value) })} placeholder="15000" />
+              <input type="number" value={form.stage === "atendimento" ? 0 : form.value || ""} onChange={(e) => setForm({ ...form, value: Number(e.target.value) })} placeholder="15000" disabled={form.stage === "atendimento"} />
+              {form.stage === "atendimento" && <span className="field-hint">Estágio de atendimento não possui valor monetário</span>}
             </label>
             <label>
               Estágio
-              <select value={form.stage} onChange={(e) => setForm({ ...form, stage: e.target.value as DealStage })}>
+              <select value={form.stage} onChange={(e) => { const s = e.target.value as DealStage; setForm({ ...form, stage: s, value: s === "atendimento" ? 0 : form.value }); }}>
                 {Object.entries(stageLabels).map(([key, label]) => (
                   <option key={key} value={key}>{label}</option>
                 ))}

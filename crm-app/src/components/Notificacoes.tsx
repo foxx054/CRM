@@ -30,7 +30,7 @@ export default function Notificacoes() {
     ...staleDeals.map((d) => ({
       id: d.id,
       type: "warning" as const,
-      text: `Negócio parado: "${d.title}" — ${formatCurrency(d.value)}`,
+      text: `Negócio parado: "${d.title}" — ${d.stage === "atendimento" ? "sem valor definido" : formatCurrency(d.value)}`,
       time: `${Math.round((Date.now() - new Date(d.createdAt).getTime()) / (1000 * 60 * 60 * 24))} dias sem avanço`,
     })),
     ...pendingTasks.map((t) => ({

@@ -78,6 +78,13 @@
   color: var(--text-muted);
 }
 
+.field-hint {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;

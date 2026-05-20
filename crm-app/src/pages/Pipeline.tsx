@@ -9,8 +9,8 @@ import { stageLabels, stageColors } from "../types/deal";
 import "./Pipeline.css";
 
 const mockDeals: Deal[] = [
-  { id: "1", title: "Sala de estar completa", company: "Lojas Becker", value: 8500, stage: "atendimento", contactName: "Ana Martins", createdAt: "2025-05-15" },
-  { id: "2", title: "Kit cozinha industrial", company: "Lojas Becker", value: 12000, stage: "atendimento", contactName: "Carlos Silva", createdAt: "2025-05-14" },
+  { id: "1", title: "Sala de estar completa", company: "Lojas Becker", value: 0, stage: "atendimento", contactName: "Ana Martins", createdAt: "2025-05-15" },
+  { id: "2", title: "Kit cozinha industrial", company: "Lojas Becker", value: 0, stage: "atendimento", contactName: "Carlos Silva", createdAt: "2025-05-14" },
   { id: "3", title: "Home theater", company: "Lojas Becker", value: 4500, stage: "orcamento", contactName: "Julia Pereira", createdAt: "2025-05-10" },
   { id: "4", title: "Móveis quarto casal", company: "Lojas Becker", value: 3200, stage: "orcamento", contactName: "Rodrigo Oliveira", createdAt: "2025-05-08" },
   { id: "5", title: "Ar condicionado 12000 BTUs", company: "Lojas Becker", value: 2800, stage: "negociacao", contactName: "Maria Souza", createdAt: "2025-05-05" },
@@ -20,7 +20,7 @@ const mockDeals: Deal[] = [
   { id: "9", title: "Suporte técnico TV", company: "Lojas Becker", value: 150, stage: "pos_venda", contactName: "Carlos Pereira", createdAt: "2025-04-20" },
   { id: "10", title: "Troca de produto", company: "Lojas Becker", value: 0, stage: "pos_venda", contactName: "Maria Souza", createdAt: "2025-04-18" },
   { id: "11", title: "Fogão 5 bocas", company: "Lojas Becker", value: 2200, stage: "orcamento", contactName: "Pedro Lima", createdAt: "2025-05-12" },
-  { id: "12", title: "Cama box casal", company: "Lojas Becker", value: 1800, stage: "atendimento", contactName: "Camila Rocha", createdAt: "2025-05-16" },
+  { id: "12", title: "Cama box casal", company: "Lojas Becker", value: 0, stage: "atendimento", contactName: "Camila Rocha", createdAt: "2025-05-16" },
 ];
 
 const stages: DealStage[] = ["atendimento", "orcamento", "negociacao", "venda_concluida", "pos_venda"];
@@ -113,7 +113,7 @@ export default function Pipeline() {
                   <span className="pl-stage-dot" style={{ background: stageColors[s.stage] }} />
                   {stageLabels[s.stage]}
                 </div>
-                <div className="pl-stage-total">{formatCurrency(s.total)}</div>
+                <div className="pl-stage-total">{s.stage === "atendimento" ? "---" : formatCurrency(s.total)}</div>
               </div>
               <div className="pl-bar-bg">
                 <div
@@ -179,7 +179,7 @@ export default function Pipeline() {
                 <span className="pl-stage-dot" style={{ background: stageColors[s.stage] }} />
                 {stageLabels[s.stage]}
               </span>
-              <span>{s.deals.length} negócio{s.deals.length !== 1 ? "s" : ""} · {formatCurrency(s.total)}</span>
+              <span>{s.deals.length} negócio{s.deals.length !== 1 ? "s" : ""} · {s.stage === "atendimento" ? "---" : formatCurrency(s.total)}</span>
             </summary>
             <div className="pl-details-body">
               {s.deals.map((deal) => (
@@ -189,7 +189,7 @@ export default function Pipeline() {
                     <span className="pl-deal-company">{deal.company}</span>
                     <span className="pl-deal-contact">{deal.contactName}</span>
                   </div>
-                  <span className="pl-deal-value">{formatCurrency(deal.value)}</span>
+                  <span className="pl-deal-value">{deal.stage === "atendimento" ? "---" : formatCurrency(deal.value)}</span>
                 </div>
               ))}
             </div>

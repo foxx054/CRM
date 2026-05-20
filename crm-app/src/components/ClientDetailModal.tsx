@@ -79,7 +79,7 @@ export default function ClientDetailModal({ client, onClose }: Props) {
                   {clientDeals.map((d) => (
                     <tr key={d.id}>
                       <td>{d.title}</td>
-                      <td className="cell-spent">{formatCurrency(d.value)}</td>
+                      <td className="cell-spent">{d.stage === "atendimento" ? "---" : formatCurrency(d.value)}</td>
                       <td><span className="status">{stageLabels[d.stage] || d.stage}</span></td>
                     </tr>
                   ))}

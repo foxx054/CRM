@@ -101,7 +101,7 @@ export default function Relatorios() {
                   <span className="pl-stage-dot" style={{ background: stageColors[s.stage] }} />
                   {stageLabels[s.stage]}
                 </div>
-                <div className="pl-stage-total">{formatCurrency(s.total)}</div>
+                <div className="pl-stage-total">{s.stage === "atendimento" ? "---" : formatCurrency(s.total)}</div>
               </div>
               <div className="pl-bar-bg">
                 <div className="pl-bar-fill" style={{ width: `${(s.total / maxStage) * 100}%`, background: stageColors[s.stage] }} />

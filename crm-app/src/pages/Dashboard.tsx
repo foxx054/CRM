@@ -16,7 +16,7 @@ const metrics = [
 ];
 
 const pipeline = [
-  { stage: "Atendimento", value: "R$ 20,5k", count: "5 orç.", pct: 90, color: "#378ADD" },
+  { stage: "Atendimento", value: "---", count: "5 orç.", pct: 90, color: "#378ADD" },
   { stage: "Orçamento", value: "R$ 9,7k", count: "3 orç.", pct: 48, color: "#EF9F27" },
   { stage: "Negociação", value: "R$ 7k", count: "2 negoc.", pct: 30, color: "#D85A30" },
   { stage: "Venda Concluída", value: "R$ 7,3k", count: "2 vendas", pct: 35, color: "#1D9E75" },

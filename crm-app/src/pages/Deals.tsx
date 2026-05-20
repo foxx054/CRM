@@ -38,7 +38,7 @@ function SortableCard({ deal }: { deal: Deal }) {
       <span className="card-title">{deal.title}</span>
       <span className="card-company">{deal.company}</span>
       <span className="card-contact">{deal.contactName}</span>
-      <span className="card-value">{formatCurrency(deal.value)}</span>
+      <span className="card-value">{deal.stage === "atendimento" ? "---" : formatCurrency(deal.value)}</span>
     </div>
   );
 }
@@ -140,7 +140,7 @@ export default function Deals() {
               <span className="card-title">{activeDeal.title}</span>
               <span className="card-company">{activeDeal.company}</span>
               <span className="card-contact">{activeDeal.contactName}</span>
-              <span className="card-value">{formatCurrency(activeDeal.value)}</span>
+              <span className="card-value">{activeDeal.stage === "atendimento" ? "---" : formatCurrency(activeDeal.value)}</span>
             </div>
           ) : null}
         </DragOverlay>

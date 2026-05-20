@@ -39,8 +39,8 @@ const defaultCompanies: Company[] = [
 ];
 
 const defaultDeals: Deal[] = [
-  { id: "d1", title: "Sala de estar completa", company: "Lojas Becker", value: 8500, stage: "atendimento", contactName: "Ana Martins", createdAt: "2025-05-15", clientId: "c4", companyId: "e1" },
-  { id: "d2", title: "Kit cozinha industrial", company: "Lojas Becker", value: 12000, stage: "atendimento", contactName: "Carlos Silva", createdAt: "2025-05-14", clientId: "c3", companyId: "e1" },
+  { id: "d1", title: "Sala de estar completa", company: "Lojas Becker", value: 0, stage: "atendimento", contactName: "Ana Martins", createdAt: "2025-05-15", clientId: "c4", companyId: "e1" },
+  { id: "d2", title: "Kit cozinha industrial", company: "Lojas Becker", value: 0, stage: "atendimento", contactName: "Carlos Silva", createdAt: "2025-05-14", clientId: "c3", companyId: "e1" },
   { id: "d3", title: "Home theater", company: "Lojas Becker", value: 4500, stage: "orcamento", contactName: "Julia Pereira", createdAt: "2025-05-10", clientId: "c2", companyId: "e1" },
   { id: "d4", title: "Móveis quarto casal", company: "Lojas Becker", value: 3200, stage: "orcamento", contactName: "Rodrigo Oliveira", createdAt: "2025-05-08" },
   { id: "d5", title: "Ar condicionado 12000 BTUs", company: "Lojas Becker", value: 2800, stage: "negociacao", contactName: "Maria Souza", createdAt: "2025-05-05", clientId: "c2" },
