@@ -12,6 +12,7 @@ import Pipeline from "./pages/Pipeline";
 import Tarefas from "./pages/Tarefas";
 import Relatorios from "./pages/Relatorios";
 import Configuracoes from "./pages/Configuracoes";
+import Vendas from "./pages/Vendas";
 import EmptyPage from "./pages/EmptyPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -34,6 +35,7 @@ function AppRoutes() {
         <Route path="/pipeline" element={<Pipeline />} />
         <Route path="/tarefas" element={<Tarefas />} />
         <Route path="/relatorios" element={<Relatorios />} />
+        <Route path="/vendas" element={<Vendas />} />
         <Route path="/agenda" element={<EmptyPage title="Agenda" />} />
         <Route path="/configuracoes" element={<Configuracoes />} />
       </Route>

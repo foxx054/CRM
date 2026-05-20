@@ -5,6 +5,7 @@ import {
   IconUsers,
   IconBuilding,
   IconBriefcase,
+  IconShoppingCart,
   IconChartBar,
   IconChecklist,
   IconCalendar,
@@ -21,6 +22,7 @@ import {
         { to: "/cliente", label: "Cliente", icon: IconUsers },
         { to: "/empresas", label: "Empresas", icon: IconBuilding },
         { to: "/negocios", label: "Negócios", icon: IconBriefcase },
+        { to: "/vendas", label: "Vendas", icon: IconShoppingCart },
       ],
     },
     {

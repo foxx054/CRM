@@ -1,5 +1,9 @@
+import { useState } from "react";
 import type { Client } from "../types/client";
+import type { Sale } from "../types/sale";
 import { useData } from "../contexts/DataContext";
+import { paymentStatusLabels, paymentStatusColors } from "../types/sale";
+import SaleDetailModal from "./SaleDetailModal";
 import {
   IconHeart,
   IconStar,
@@ -18,8 +22,13 @@ function formatCurrency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+function formatDate(dateStr: string) {
+  return new Date(dateStr + "T12:00:00").toLocaleDateString("pt-BR");
+}
+
 export default function ClientDetailModal({ client, onClose }: Props) {
-  const { deals } = useData();
+  const { deals, sales } = useData();
+  const [detailSale, setDetailSale] = useState<Sale | null>(null);
 
   if (!client) return null;
 
@@ -27,6 +36,9 @@ export default function ClientDetailModal({ client, onClose }: Props) {
     (d) => d.clientId === client.id || d.contactName === client.name
   );
   const totalDeals = clientDeals.reduce((s, d) => s + d.value, 0);
+
+  const clientSales = sales.filter((s) => s.clientId === client.id);
+  const totalSales = clientSales.reduce((s, v) => s + v.total, 0);
 
   const stageLabels: Record<string, string> = {
     atendimento: "Atendimento",
@@ -111,9 +123,60 @@ export default function ClientDetailModal({ client, onClose }: Props) {
           </div>
 
           <div className="detail-section">
-            <h3>Histórico de Compras</h3>
+            <h3>Compras Realizadas ({clientSales.length})</h3>
+            {clientSales.length === 0 ? (
+              <p className="detail-empty">Nenhuma compra registrada</p>
+            ) : (
+              <>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nº Venda</th>
+                      <th>Data</th>
+                      <th>Produtos</th>
+                      <th>Total</th>
+                      <th>Pagamento</th>
+                      <th>Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {clientSales.map((s) => (
+                      <tr key={s.id}>
+                        <td className="cell-sale-num" style={{ cursor: "pointer", color: "var(--accent)", fontWeight: 600 }} onClick={() => setDetailSale(s)}>{s.saleNumber}</td>
+                        <td className="cell-date">{formatDate(s.date)}</td>
+                        <td>{s.items.map((i) => i.product).join(", ")}</td>
+                        <td className="cell-spent">{formatCurrency(s.total)}</td>
+                        <td>{s.installments > 1 ? `${s.installments}x ${s.cardBrand}` : s.paymentMethod === "pix" ? "PIX" : s.paymentMethod === "debit_card" ? "Débito" : "À vista"}</td>
+                        <td>
+                          <span className="status" style={{ background: `${paymentStatusColors[s.paymentStatus]}18`, color: paymentStatusColors[s.paymentStatus] }}>
+                            {paymentStatusLabels[s.paymentStatus]}
+                          </span>
+                        </td>
+                        <td>
+                          <button className="btn-icon" onClick={() => setDetailSale(s)} title="Detalhes">📋</button>
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="detail-total">
+                      <td><strong>Total</strong></td>
+                      <td></td>
+                      <td></td>
+                      <td className="cell-spent"><strong>{formatCurrency(totalSales)}</strong></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </>
+            )}
+          </div>
+
+          <div className="detail-section">
+            <h3>Negócios no Pipeline</h3>
             {clientDeals.length === 0 ? (
-              <p className="detail-empty">Nenhuma compra encontrada</p>
+              <p className="detail-empty">Nenhum negócio encontrado</p>
             ) : (
               <table>
                 <thead>
@@ -145,6 +208,7 @@ export default function ClientDetailModal({ client, onClose }: Props) {
           <button className="btn btn-secondary" onClick={onClose}>Fechar</button>
         </div>
       </div>
+      <SaleDetailModal sale={detailSale} onClose={() => setDetailSale(null)} />
     </div>
   );
 }
