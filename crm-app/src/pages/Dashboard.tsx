@@ -9,41 +9,41 @@ import {
 import "./Dashboard.css";
 
 const metrics = [
-  { label: "Receita do mês", value: "R$ 284k", change: "+12% vs mês anterior", up: true },
-  { label: "Negócios ativos", value: "47", change: "+5 esta semana", up: true },
-  { label: "Taxa de conversão", value: "32%", change: "-2% vs mês anterior", up: false },
-  { label: "Novos contatos", value: "128", change: "+18% este mês", up: true },
+  { label: "Receita do mês", value: "R$ 42k", change: "+18% vs mês anterior", up: true },
+  { label: "Negócios ativos", value: "8", change: "+3 esta semana", up: true },
+  { label: "Taxa de conversão", value: "42%", change: "+5% vs mês anterior", up: true },
+  { label: "Novos clientes", value: "28", change: "+12% este mês", up: true },
 ];
 
 const pipeline = [
-  { stage: "Prospecção", value: "R$ 142k", count: "18 neg.", pct: 90, color: "#378ADD" },
-  { stage: "Qualificação", value: "R$ 98k", count: "12 neg.", pct: 68, color: "#1D9E75" },
-  { stage: "Proposta", value: "R$ 67k", count: "9 neg.", pct: 48, color: "#EF9F27" },
-  { stage: "Negociação", value: "R$ 41k", count: "6 neg.", pct: 30, color: "#D85A30" },
-  { stage: "Fechamento", value: "R$ 18k", count: "2 neg.", pct: 14, color: "#A32D2D" },
+  { stage: "Atendimento", value: "R$ 20,5k", count: "5 orç.", pct: 90, color: "#378ADD" },
+  { stage: "Orçamento", value: "R$ 9,7k", count: "3 orç.", pct: 48, color: "#EF9F27" },
+  { stage: "Negociação", value: "R$ 7k", count: "2 negoc.", pct: 30, color: "#D85A30" },
+  { stage: "Venda Concluída", value: "R$ 7,3k", count: "2 vendas", pct: 35, color: "#1D9E75" },
+  { stage: "Pós-Venda", value: "R$ 150", count: "1 atend.", pct: 8, color: "#3C3489" },
 ];
 
 const chartBars = [
-  { label: "Dez", pct: 38, color: "#B5D4F4" },
-  { label: "Jan", pct: 55, color: "#85B7EB" },
-  { label: "Fev", pct: 44, color: "#B5D4F4" },
-  { label: "Mar", pct: 68, color: "#378ADD" },
-  { label: "Abr", pct: 72, color: "#378ADD" },
+  { label: "Dez", pct: 28, color: "#B5D4F4" },
+  { label: "Jan", pct: 35, color: "#85B7EB" },
+  { label: "Fev", pct: 42, color: "#B5D4F4" },
+  { label: "Mar", pct: 55, color: "#378ADD" },
+  { label: "Abr", pct: 68, color: "#378ADD" },
   { label: "Mai", pct: 90, color: "#185FA5" },
 ];
 
 const contacts = [
-  { initials: "AM", name: "Ana Martins", company: "TechSul Ltda.", badge: "hot", badgeLabel: "Quente", color: "#E6F1FB", textColor: "#185FA5" },
-  { initials: "CS", name: "Carlos Silva", company: "Grupo Nórdico", badge: "won", badgeLabel: "Ganho", color: "#EAF3DE", textColor: "#3B6D11" },
-  { initials: "JP", name: "Julia Pereira", company: "Inova Soluções", badge: "warm", badgeLabel: "Morno", color: "#FAEEDA", textColor: "#854F0B" },
-  { initials: "RO", name: "Rodrigo Oliveira", company: "DataBridge SA", badge: "cold", badgeLabel: "Frio", color: "#EEEDFE", textColor: "#3C3489" },
+  { initials: "AM", name: "Ana Martins", company: "Lojas Becker", badge: "hot", badgeLabel: "Quente", color: "#E6F1FB", textColor: "#185FA5" },
+  { initials: "CS", name: "Carlos Silva", company: "Lojas Becker", badge: "won", badgeLabel: "Ganho", color: "#EAF3DE", textColor: "#3B6D11" },
+  { initials: "JP", name: "Julia Pereira", company: "Lojas Becker", badge: "warm", badgeLabel: "Morno", color: "#FAEEDA", textColor: "#854F0B" },
+  { initials: "RO", name: "Rodrigo Oliveira", company: "Lojas Becker", badge: "cold", badgeLabel: "Frio", color: "#EEEDFE", textColor: "#3C3489" },
 ];
 
 const activities = [
-  { icon: IconMail, bg: "#E6F1FB", color: "#185FA5", text: "<strong>Ana Martins</strong> abriu proposta enviada", time: "há 12 min" },
-  { icon: IconCheck, bg: "#EAF3DE", color: "#3B6D11", text: "Negócio <strong>Grupo Nórdico</strong> marcado como ganho", time: "há 1h" },
-  { icon: IconPhone, bg: "#FAEEDA", color: "#854F0B", text: "Ligação agendada com <strong>Julia Pereira</strong>", time: "há 3h" },
-  { icon: IconUserPlus, bg: "#FAECE7", color: "#993C1D", text: "Novo contato <strong>Rodrigo Oliveira</strong> criado", time: "hoje, 09:15" },
+  { icon: IconMail, bg: "#E6F1FB", color: "#185FA5", text: "<strong>Ana Martins</strong> solicitou orçamento de sala completa", time: "há 12 min" },
+  { icon: IconCheck, bg: "#EAF3DE", color: "#3B6D11", text: "Venda <strong>Smart TV 55\"</strong> concluída com sucesso", time: "há 1h" },
+  { icon: IconPhone, bg: "#FAEEDA", color: "#854F0B", text: "Ligação agendada com <strong>Julia Pereira</strong> para negociar", time: "há 3h" },
+  { icon: IconUserPlus, bg: "#FAECE7", color: "#993C1D", text: "Novo contato <strong>Pedro Lima</strong> cadastrado na loja", time: "hoje, 09:15" },
 ];
 
 export default function Dashboard() {
