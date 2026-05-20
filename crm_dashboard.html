@@ -1,0 +1,228 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.crm { display: flex; height: 620px; background: var(--color-background-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; border: 0.5px solid var(--color-border-tertiary); }
+.sidebar { width: 200px; background: var(--color-background-primary); border-right: 0.5px solid var(--color-border-tertiary); display: flex; flex-direction: column; padding: 16px 0; flex-shrink: 0; }
+.logo { padding: 0 16px 20px; font-size: 15px; font-weight: 500; color: var(--color-text-primary); display: flex; align-items: center; gap: 8px; }
+.logo-dot { width: 24px; height: 24px; background: #378ADD; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+.logo-dot i { font-size: 13px; color: #fff; }
+.nav-section { font-size: 10px; color: var(--color-text-tertiary); padding: 0 16px 6px; letter-spacing: 0.08em; text-transform: uppercase; }
+.nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 16px; font-size: 13px; color: var(--color-text-secondary); cursor: pointer; border-radius: 0; transition: background 0.15s; }
+.nav-item:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+.nav-item.active { background: #E6F1FB; color: #185FA5; font-weight: 500; }
+.nav-item i { font-size: 16px; }
+.nav-divider { height: 0.5px; background: var(--color-border-tertiary); margin: 10px 16px; }
+.sidebar-bottom { margin-top: auto; padding: 0 16px; }
+.user-chip { display: flex; align-items: center; gap: 9px; padding: 10px 0; border-top: 0.5px solid var(--color-border-tertiary); }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: #E6F1FB; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: #185FA5; flex-shrink: 0; }
+.user-info p { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.user-info span { font-size: 11px; color: var(--color-text-tertiary); }
+.main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); flex-shrink: 0; }
+.topbar-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.search-box { display: flex; align-items: center; gap: 6px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 6px 10px; font-size: 13px; color: var(--color-text-secondary); cursor: pointer; }
+.btn-primary { background: #185FA5; color: #fff; border: none; border-radius: var(--border-radius-md); padding: 7px 13px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.content { padding: 18px 20px; flex: 1; }
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+.metric-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 14px; }
+.metric-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 6px; }
+.metric-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.metric-change { font-size: 11px; }
+.metric-change.up { color: #3B6D11; }
+.metric-change.down { color: #A32D2D; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px; }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.card-link { font-size: 12px; color: #185FA5; cursor: pointer; }
+.pipeline-stage { margin-bottom: 10px; }
+.stage-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.stage-name { font-size: 12px; color: var(--color-text-secondary); }
+.stage-val { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.bar-bg { height: 6px; background: var(--color-background-secondary); border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; }
+.contact-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.contact-row:last-child { border-bottom: none; }
+.c-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+.contact-info { flex: 1; }
+.contact-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.contact-company { font-size: 11px; color: var(--color-text-tertiary); }
+.badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 500; }
+.badge-hot { background: #FAECE7; color: #993C1D; }
+.badge-warm { background: #FAEEDA; color: #854F0B; }
+.badge-cold { background: #E6F1FB; color: #185FA5; }
+.badge-won { background: #EAF3DE; color: #3B6D11; }
+.activity-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.activity-row:last-child { border-bottom: none; }
+.act-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.act-text { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+.act-text strong { color: var(--color-text-primary); font-weight: 500; }
+.act-time { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+.chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding-top: 8px; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bar-col-fill { width: 100%; border-radius: 4px 4px 0 0; }
+.bar-col-label { font-size: 9px; color: var(--color-text-tertiary); }
+</style>
+
+<h2 class="sr-only">CRM Dashboard — visão geral de pipeline, contatos e atividades recentes</h2>
+<div class="crm">
+  <nav class="sidebar">
+    <div class="logo">
+      <div class="logo-dot"><i class="ti ti-chart-dots" aria-hidden="true"></i></div>
+      NovaCRM
+    </div>
+    <div class="nav-section">Principal</div>
+    <div class="nav-item active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</div>
+    <div class="nav-item"><i class="ti ti-users" aria-hidden="true"></i> Contatos</div>
+    <div class="nav-item"><i class="ti ti-building" aria-hidden="true"></i> Empresas</div>
+    <div class="nav-item"><i class="ti ti-briefcase" aria-hidden="true"></i> Negócios</div>
+    <div class="nav-divider"></div>
+    <div class="nav-section">Vendas</div>
+    <div class="nav-item"><i class="ti ti-chart-bar" aria-hidden="true"></i> Pipeline</div>
+    <div class="nav-item"><i class="ti ti-checklist" aria-hidden="true"></i> Tarefas</div>
+    <div class="nav-item"><i class="ti ti-calendar" aria-hidden="true"></i> Agenda</div>
+    <div class="nav-divider"></div>
+    <div class="nav-section">Análise</div>
+    <div class="nav-item"><i class="ti ti-report-analytics" aria-hidden="true"></i> Relatórios</div>
+    <div class="nav-item"><i class="ti ti-settings" aria-hidden="true"></i> Configurações</div>
+    <div class="sidebar-bottom">
+      <div class="user-chip">
+        <div class="avatar">RF</div>
+        <div class="user-info">
+          <p>Rafael F.</p>
+          <span>Gerente de Vendas</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <div class="search-box"><i class="ti ti-search" style="font-size:14px" aria-hidden="true"></i> Buscar...</div>
+        <button class="btn-primary"><i class="ti ti-plus" style="font-size:14px" aria-hidden="true"></i> Novo negócio</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="metrics">
+        <div class="metric-card">
+          <div class="metric-label">Receita do mês</div>
+          <div class="metric-value">R$ 284k</div>
+          <div class="metric-change up"><i class="ti ti-trending-up" style="font-size:12px;vertical-align:-1px"></i> +12% vs mês anterior</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Negócios ativos</div>
+          <div class="metric-value">47</div>
+          <div class="metric-change up"><i class="ti ti-trending-up" style="font-size:12px;vertical-align:-1px"></i> +5 esta semana</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Taxa de conversão</div>
+          <div class="metric-value">32%</div>
+          <div class="metric-change down"><i class="ti ti-trending-down" style="font-size:12px;vertical-align:-1px"></i> -2% vs mês anterior</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Novos contatos</div>
+          <div class="metric-value">128</div>
+          <div class="metric-change up"><i class="ti ti-trending-up" style="font-size:12px;vertical-align:-1px"></i> +18% este mês</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Pipeline de vendas</div>
+            <div class="card-link">Ver todos →</div>
+          </div>
+          <div class="pipeline-stage">
+            <div class="stage-header"><span class="stage-name">Prospecção</span><span class="stage-val">R$ 142k · 18 neg.</span></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:90%;background:#378ADD"></div></div>
+          </div>
+          <div class="pipeline-stage">
+            <div class="stage-header"><span class="stage-name">Qualificação</span><span class="stage-val">R$ 98k · 12 neg.</span></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:68%;background:#1D9E75"></div></div>
+          </div>
+          <div class="pipeline-stage">
+            <div class="stage-header"><span class="stage-name">Proposta</span><span class="stage-val">R$ 67k · 9 neg.</span></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:48%;background:#EF9F27"></div></div>
+          </div>
+          <div class="pipeline-stage">
+            <div class="stage-header"><span class="stage-name">Negociação</span><span class="stage-val">R$ 41k · 6 neg.</span></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:30%;background:#D85A30"></div></div>
+          </div>
+          <div class="pipeline-stage">
+            <div class="stage-header"><span class="stage-name">Fechamento</span><span class="stage-val">R$ 18k · 2 neg.</span></div>
+            <div class="bar-bg"><div class="bar-fill" style="width:14%;background:#A32D2D"></div></div>
+          </div>
+
+          <div style="margin-top:14px">
+            <div class="card-title" style="margin-bottom:10px">Receita por mês</div>
+            <div class="chart-bars">
+              <div class="bar-col"><div class="bar-col-fill" style="height:38%;background:#B5D4F4"></div><div class="bar-col-label">Dez</div></div>
+              <div class="bar-col"><div class="bar-col-fill" style="height:55%;background:#85B7EB"></div><div class="bar-col-label">Jan</div></div>
+              <div class="bar-col"><div class="bar-col-fill" style="height:44%;background:#B5D4F4"></div><div class="bar-col-label">Fev</div></div>
+              <div class="bar-col"><div class="bar-col-fill" style="height:68%;background:#378ADD"></div><div class="bar-col-label">Mar</div></div>
+              <div class="bar-col"><div class="bar-col-fill" style="height:72%;background:#378ADD"></div><div class="bar-col-label">Abr</div></div>
+              <div class="bar-col"><div class="bar-col-fill" style="height:90%;background:#185FA5"></div><div class="bar-col-label">Mai</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Contatos recentes</div>
+              <div class="card-link">Ver todos →</div>
+            </div>
+            <div class="contact-row">
+              <div class="c-avatar" style="background:#E6F1FB;color:#185FA5">AM</div>
+              <div class="contact-info"><div class="contact-name">Ana Martins</div><div class="contact-company">TechSul Ltda.</div></div>
+              <span class="badge badge-hot">Quente</span>
+            </div>
+            <div class="contact-row">
+              <div class="c-avatar" style="background:#EAF3DE;color:#3B6D11">CS</div>
+              <div class="contact-info"><div class="contact-name">Carlos Silva</div><div class="contact-company">Grupo Nórdico</div></div>
+              <span class="badge badge-won">Ganho</span>
+            </div>
+            <div class="contact-row">
+              <div class="c-avatar" style="background:#FAEEDA;color:#854F0B">JP</div>
+              <div class="contact-info"><div class="contact-name">Julia Pereira</div><div class="contact-company">Inova Soluções</div></div>
+              <span class="badge badge-warm">Morno</span>
+            </div>
+            <div class="contact-row">
+              <div class="c-avatar" style="background:#EEEDFE;color:#3C3489">RO</div>
+              <div class="contact-info"><div class="contact-name">Rodrigo Oliveira</div><div class="contact-company">DataBridge SA</div></div>
+              <span class="badge badge-cold">Frio</span>
+            </div>
+          </div>
+
+          <div class="card" style="flex:1">
+            <div class="card-header">
+              <div class="card-title">Atividade recente</div>
+              <div class="card-link">Ver tudo →</div>
+            </div>
+            <div class="activity-row">
+              <div class="act-icon" style="background:#E6F1FB"><i class="ti ti-mail" style="font-size:14px;color:#185FA5"></i></div>
+              <div><div class="act-text"><strong>Ana Martins</strong> abriu proposta enviada</div><div class="act-time">há 12 min</div></div>
+            </div>
+            <div class="activity-row">
+              <div class="act-icon" style="background:#EAF3DE"><i class="ti ti-check" style="font-size:14px;color:#3B6D11"></i></div>
+              <div><div class="act-text">Negócio <strong>Grupo Nórdico</strong> marcado como ganho</div><div class="act-time">há 1h</div></div>
+            </div>
+            <div class="activity-row">
+              <div class="act-icon" style="background:#FAEEDA"><i class="ti ti-phone" style="font-size:14px;color:#854F0B"></i></div>
+              <div><div class="act-text">Ligação agendada com <strong>Julia Pereira</strong></div><div class="act-time">há 3h</div></div>
+            </div>
+            <div class="activity-row">
+              <div class="act-icon" style="background:#FAECE7"><i class="ti ti-user-plus" style="font-size:14px;color:#993C1D"></i></div>
+              <div><div class="act-text">Novo contato <strong>Rodrigo Oliveira</strong> criado</div><div class="act-time">hoje, 09:15</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
