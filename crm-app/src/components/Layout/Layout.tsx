@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
@@ -7,7 +7,7 @@ import SearchModal from "../SearchModal";
 import Notificacoes from "../Notificacoes";
 import "../SearchModal.css";
 import "../Notificacoes.css";
-import { IconSearch, IconPlus, IconLogout, IconMoon, IconSun } from "@tabler/icons-react";
+import { IconSearch, IconLogout, IconMoon, IconSun } from "@tabler/icons-react";
 import "./Layout.css";
 
 const pageTitles: Record<string, string> = {
@@ -25,7 +25,6 @@ const pageTitles: Record<string, string> = {
 
 export default function Layout() {
   const location = useLocation();
-  const navigate = useNavigate();
   const { logout, user } = useAuth();
   const { theme, toggle: toggleTheme } = useTheme();
   const title = pageTitles[location.pathname] || "CRM";
@@ -44,10 +43,6 @@ export default function Layout() {
             </div>
             <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
             <Notificacoes />
-            <button className="btn btn-primary" onClick={() => navigate("/negocios", { state: { novoNegocio: true } })}>
-              <IconPlus size={16} />
-              Novo negócio
-            </button>
             <button className="btn btn-icon-only" onClick={toggleTheme} title={theme === "light" ? "Modo escuro" : "Modo claro"}>
               {theme === "light" ? <IconMoon size={16} /> : <IconSun size={16} />}
             </button>
