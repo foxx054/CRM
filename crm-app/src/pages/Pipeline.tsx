@@ -4,61 +4,72 @@ import {
   IconPercentage,
   IconBriefcase,
 } from "@tabler/icons-react";
-import type { Deal, DealStage } from "../types/deal";
+import type { DealStage } from "../types/deal";
 import { stageLabels, stageColors } from "../types/deal";
+import { useData } from "../contexts/DataContext";
 import "./Pipeline.css";
 
-const mockDeals: Deal[] = [
-  { id: "1", title: "Sala de estar completa", company: "Lojas Becker", value: 0, stage: "atendimento", contactName: "Ana Martins", createdAt: "2025-05-15" },
-  { id: "2", title: "Kit cozinha industrial", company: "Lojas Becker", value: 0, stage: "atendimento", contactName: "Carlos Silva", createdAt: "2025-05-14" },
-  { id: "3", title: "Home theater", company: "Lojas Becker", value: 4500, stage: "orcamento", contactName: "Julia Pereira", createdAt: "2025-05-10" },
-  { id: "4", title: "Móveis quarto casal", company: "Lojas Becker", value: 3200, stage: "orcamento", contactName: "Rodrigo Oliveira", createdAt: "2025-05-08" },
-  { id: "5", title: "Ar condicionado 12000 BTUs", company: "Lojas Becker", value: 2800, stage: "negociacao", contactName: "Maria Souza", createdAt: "2025-05-05" },
-  { id: "6", title: "Máquina de lavar + secadora", company: "Lojas Becker", value: 4200, stage: "negociacao", contactName: "João Silva", createdAt: "2025-05-03" },
-  { id: "7", title: "Smart TV 55\"", company: "Lojas Becker", value: 3500, stage: "venda_concluida", contactName: "Lucas Oliveira", createdAt: "2025-04-28" },
-  { id: "8", title: "Geladeira frost free", company: "Lojas Becker", value: 3800, stage: "venda_concluida", contactName: "Ana Costa", createdAt: "2025-04-25" },
-  { id: "9", title: "Suporte técnico TV", company: "Lojas Becker", value: 150, stage: "pos_venda", contactName: "Carlos Pereira", createdAt: "2025-04-20" },
-  { id: "10", title: "Troca de produto", company: "Lojas Becker", value: 0, stage: "pos_venda", contactName: "Maria Souza", createdAt: "2025-04-18" },
-  { id: "11", title: "Fogão 5 bocas", company: "Lojas Becker", value: 2200, stage: "orcamento", contactName: "Pedro Lima", createdAt: "2025-05-12" },
-  { id: "12", title: "Cama box casal", company: "Lojas Becker", value: 0, stage: "atendimento", contactName: "Camila Rocha", createdAt: "2025-05-16" },
-];
-
 const stages: DealStage[] = ["atendimento", "orcamento", "negociacao", "venda_concluida", "pos_venda"];
-
-const conversionRates = [
-  { from: "Atendimento → Orçamento", rate: 75 },
-  { from: "Orçamento → Negociação", rate: 55 },
-  { from: "Negociação → Venda Concluída", rate: 42 },
-];
-
-const monthlyRevenue = [
-  { month: "Dez", value: 12000 },
-  { month: "Jan", value: 18000 },
-  { month: "Fev", value: 27000 },
-  { month: "Mar", value: 22000 },
-  { month: "Abr", value: 35000 },
-  { month: "Mai", value: 42000 },
-];
-
 const closedStages: DealStage[] = ["venda_concluida", "pos_venda"];
+
+const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
 function formatCurrency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
 export default function Pipeline() {
-  const totalPipeline = mockDeals.reduce((s, d) => s + d.value, 0);
-  const activeDeals = mockDeals.filter((d) => !closedStages.includes(d.stage)).length;
-  const closedDeals = mockDeals.filter((d) => closedStages.includes(d.stage));
+  const { deals } = useData();
+
+  const totalPipeline = deals.reduce((s, d) => s + d.value, 0);
+  const activeDeals = deals.filter((d) => !closedStages.includes(d.stage)).length;
+  const closedDeals = deals.filter((d) => closedStages.includes(d.stage));
   const closedValue = closedDeals.reduce((s, d) => s + d.value, 0);
-  const avgDeal = Math.round(totalPipeline / mockDeals.length);
+  const avgDeal = deals.length ? Math.round(totalPipeline / deals.length) : 0;
 
   const stageData = stages.map((stage) => {
-    const deals = mockDeals.filter((d) => d.stage === stage);
-    const total = deals.reduce((s, d) => s + d.value, 0);
-    const maxValue = 75000;
-    return { stage, deals, total, pct: Math.round((total / maxValue) * 100) };
+    const ds = deals.filter((d) => d.stage === stage);
+    const total = ds.reduce((s, d) => s + d.value, 0);
+    return { stage, deals: ds, total, count: ds.length };
   });
+
+  const maxCount = Math.max(...stageData.map((s) => s.count), 1);
+  const maxTotal = Math.max(...stageData.filter((s) => s.stage !== "atendimento").map((s) => s.total), 1);
+
+  const stageBars = stageData.map((s) => ({
+    ...s,
+    pct: s.stage === "atendimento" ? Math.round((s.count / maxCount) * 100) : Math.round((s.total / maxTotal) * 100),
+  }));
+
+  const atendimentoCount = stageData.find((s) => s.stage === "atendimento")?.count ?? 0;
+  const orcamentoCount = stageData.find((s) => s.stage === "orcamento")?.count ?? 0;
+  const negociacaoCount = stageData.find((s) => s.stage === "negociacao")?.count ?? 0;
+  const vendaCount = stageData.find((s) => s.stage === "venda_concluida")?.count ?? 0;
+
+  const conversionRates = [
+    { from: "Atendimento → Orçamento", rate: atendimentoCount ? Math.round((orcamentoCount / atendimentoCount) * 100) : 0 },
+    { from: "Orçamento → Negociação", rate: orcamentoCount ? Math.round((negociacaoCount / orcamentoCount) * 100) : 0 },
+    { from: "Negociação → Venda Concluída", rate: negociacaoCount ? Math.round((vendaCount / negociacaoCount) * 100) : 0 },
+  ];
+
+  const monthlyRevenue = (() => {
+    const now = new Date();
+    const months: { month: string; value: number }[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${d.getMonth()}`;
+      const label = monthNames[d.getMonth()];
+      const value = deals
+        .filter((x) => closedStages.includes(x.stage))
+        .filter((x) => {
+          const xd = new Date(x.createdAt);
+          return `${xd.getFullYear()}-${xd.getMonth()}` === key;
+        })
+        .reduce((s, x) => s + x.value, 0);
+      months.push({ month: label, value });
+    }
+    return months;
+  })();
 
   return (
     <div className="pipeline-page">
@@ -106,14 +117,14 @@ export default function Pipeline() {
           <div className="pl-card-header">
             <span className="pl-card-title">Funil por estágio</span>
           </div>
-          {stageData.map((s) => (
+          {stageBars.map((s) => (
             <div key={s.stage} className="pl-stage-row">
               <div className="pl-stage-top">
                 <div className="pl-stage-name">
                   <span className="pl-stage-dot" style={{ background: stageColors[s.stage] }} />
                   {stageLabels[s.stage]}
                 </div>
-                <div className="pl-stage-total">{s.stage === "atendimento" ? `${s.deals.length} cliente${s.deals.length !== 1 ? "s" : ""}` : formatCurrency(s.total)}</div>
+                <div className="pl-stage-total">{s.stage === "atendimento" ? `${s.count} cliente${s.count !== 1 ? "s" : ""}` : formatCurrency(s.total)}</div>
               </div>
               <div className="pl-bar-bg">
                 <div
@@ -122,7 +133,7 @@ export default function Pipeline() {
                 />
               </div>
               <div className="pl-stage-deals">
-                {s.deals.length} negócio{s.deals.length !== 1 ? "s" : ""}
+                {s.count} negócio{s.count !== 1 ? "s" : ""}
               </div>
             </div>
           ))}
@@ -153,7 +164,7 @@ export default function Pipeline() {
             <span className="pl-card-title">Receita mensal</span>
             <div className="pl-chart">
               {monthlyRevenue.map((m) => {
-                const maxVal = Math.max(...monthlyRevenue.map((r) => r.value));
+                const maxVal = Math.max(...monthlyRevenue.map((r) => r.value), 1);
                 const pct = (m.value / maxVal) * 100;
                 return (
                   <div key={m.month} className="pl-chart-col">
@@ -172,14 +183,14 @@ export default function Pipeline() {
         <div className="pl-card-header">
           <span className="pl-card-title">Negócios por estágio</span>
         </div>
-        {stageData.map((s) => (
+        {stageBars.map((s) => (
           <details key={s.stage} className="pl-details">
             <summary className="pl-summary">
               <span className="pl-summary-left">
                 <span className="pl-stage-dot" style={{ background: stageColors[s.stage] }} />
                 {stageLabels[s.stage]}
               </span>
-              <span>{s.deals.length} negócio{s.deals.length !== 1 ? "s" : ""} · {s.stage === "atendimento" ? `${s.deals.length} cliente${s.deals.length !== 1 ? "s" : ""}` : formatCurrency(s.total)}</span>
+              <span>{s.count} negócio{s.count !== 1 ? "s" : ""} · {s.stage === "atendimento" ? `${s.count} cliente${s.count !== 1 ? "s" : ""}` : formatCurrency(s.total)}</span>
             </summary>
             <div className="pl-details-body">
               {s.deals.map((deal) => (
