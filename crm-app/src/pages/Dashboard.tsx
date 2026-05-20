@@ -1,23 +1,33 @@
+import type { DealStage } from "../types/deal";
+import type { SaleItem } from "../types/sale";
+import { stageLabels, stageColors } from "../types/deal";
+import { useData } from "../contexts/DataContext";
 import {
   IconTrendingUp,
-  IconTrendingDown,
   IconMail,
   IconCheck,
   IconPhone,
   IconUserPlus,
+  IconCurrencyDollar,
+  IconPercentage,
+  IconShoppingCart,
+  IconUsers,
+  IconRotate,
+  IconAlertTriangle,
 } from "@tabler/icons-react";
-import type { DealStage } from "../types/deal";
-import { stageLabels, stageColors } from "../types/deal";
-import { useData } from "../contexts/DataContext";
 import "./Dashboard.css";
 
 const closedStages: DealStage[] = ["venda_concluida", "pos_venda"];
 const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-const chartColors = ["#B5D4F4", "#85B7EB", "#B5D4F4", "#378ADD", "#378ADD", "#185FA5"];
-
 function formatCurrency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function formatShortCurrency(value: number) {
+  if (value >= 1000000) return `R$ ${(value / 1000000).toFixed(1)}M`;
+  if (value >= 1000) return `R$ ${(value / 1000).toFixed(1)}k`;
+  return formatCurrency(value);
 }
 
 function initials(name: string) {
@@ -31,40 +41,25 @@ const badgeMap: Record<string, { badge: string; label: string; bg: string; color
 };
 
 export default function Dashboard() {
-  const { deals, clients, tasks } = useData();
+  const { deals, clients, tasks, sales } = useData();
 
   const now = new Date();
-  const currentMonth = `${now.getFullYear()}-${now.getMonth()}`;
-  const prevMonth = `${now.getFullYear()}-${now.getMonth() - 1}`;
-
   const closedDeals = deals.filter((d) => closedStages.includes(d.stage));
-  const revenueThisMonth = closedDeals
-    .filter((d) => {
-      const xd = new Date(d.createdAt);
-      return `${xd.getFullYear()}-${xd.getMonth()}` === currentMonth;
-    })
-    .reduce((s, d) => s + d.value, 0);
-  const revenuePrevMonth = closedDeals
-    .filter((d) => {
-      const xd = new Date(d.createdAt);
-      return `${xd.getFullYear()}-${xd.getMonth()}` === prevMonth;
-    })
-    .reduce((s, d) => s + d.value, 0);
-
-  const activeCount = deals.filter((d) => !closedStages.includes(d.stage)).length;
   const conversionRate = deals.length ? Math.round((closedDeals.length / deals.length) * 100) : 0;
-  const clientCount = clients.length;
 
-  const revenueChange = revenuePrevMonth
-    ? `${Math.round(((revenueThisMonth - revenuePrevMonth) / revenuePrevMonth) * 100)}% vs mês anterior`
-    : "—";
-  const revenueUp = revenueThisMonth >= revenuePrevMonth;
+  const totalRevenue = sales.reduce((s, v) => s + v.total, 0);
+  const totalSales = sales.length;
+  const avgTicket = totalSales ? totalRevenue / totalSales : 0;
+  const activeClients = clients.filter((c) => c.status === "active").length;
+  const allItems: SaleItem[] = sales.flatMap((s) => s.items);
 
-  const metrics = [
-    { label: "Receita do mês", value: formatCurrency(revenueThisMonth), change: revenueChange, up: revenueUp },
-    { label: "Negócios ativos", value: String(activeCount), change: `${deals.length} total no pipeline`, up: true },
-    { label: "Taxa de conversão", value: `${conversionRate}%`, change: `${closedDeals.length} concluídos`, up: conversionRate > 30 },
-    { label: "Novos clientes", value: String(clientCount), change: "clientes cadastrados", up: true },
+  const kpis = [
+    { label: "Faturamento", value: formatShortCurrency(totalRevenue), sub: `${totalSales} vendas`, icon: IconCurrencyDollar, bg: "#E6F1FB", color: "#185FA5" },
+    { label: "Margem", value: "32%", sub: "estimada", icon: IconPercentage, bg: "#EAF3DE", color: "#3B6D11" },
+    { label: "Ticket Médio", value: formatCurrency(avgTicket), sub: "por venda", icon: IconShoppingCart, bg: "#FAEEDA", color: "#854F0B" },
+    { label: "Conversão", value: `${conversionRate}%`, sub: `${closedDeals.length} concluídos`, icon: IconTrendingUp, bg: "#EEEDFE", color: "#3C3489" },
+    { label: "Clientes Ativos", value: String(activeClients), sub: `${clients.length} cadastrados`, icon: IconUsers, bg: "#FDE8E8", color: "#C53030" },
+    { label: "Giro Estoque", value: `${allItems.length} itens`, sub: `${new Set(allItems.map(i => i.sku)).size} SKUs`, icon: IconRotate, bg: "#E6F1FB", color: "#185FA5" },
   ];
 
   const stages: DealStage[] = ["atendimento", "orcamento", "negociacao", "venda_concluida", "pos_venda"];
@@ -84,23 +79,43 @@ export default function Dashboard() {
     color: stageColors[s.stage],
   }));
 
-  const monthlyRevenue = (() => {
-    const months: { label: string; pct: number; color: string }[] = [];
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const key = `${d.getFullYear()}-${d.getMonth()}`;
-      const label = monthNames[d.getMonth()];
-      const value = closedDeals
-        .filter((x) => {
-          const xd = new Date(x.createdAt);
-          return `${xd.getFullYear()}-${xd.getMonth()}` === key;
-        })
-        .reduce((s, x) => s + x.value, 0);
-      months.push({ label, pct: value, color: chartColors[i] });
-    }
-    const maxVal = Math.max(...months.map((m) => m.pct), 1);
-    return months.map((m) => ({ ...m, pct: Math.round((m.pct / maxVal) * 100) }));
-  })();
+  const salesMonthlyRevenue: { month: string; value: number }[] = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    const label = monthNames[d.getMonth()];
+    const value = sales
+      .filter((s) => { const sd = new Date(s.date); return `${sd.getFullYear()}-${sd.getMonth()}` === key; })
+      .reduce((s, v) => s + v.total, 0);
+    salesMonthlyRevenue.push({ month: label, value });
+  }
+  const maxRevenue = Math.max(...salesMonthlyRevenue.map((m) => m.value), 1);
+
+  const productSales: Record<string, { qty: number; revenue: number; lastSale: string }> = {};
+  sales.forEach((s) => {
+    s.items.forEach((item) => {
+      if (!productSales[item.product]) productSales[item.product] = { qty: 0, revenue: 0, lastSale: "" };
+      productSales[item.product].qty += item.quantity;
+      productSales[item.product].revenue += item.unitPrice * item.quantity;
+      if (s.date > productSales[item.product].lastSale) productSales[item.product].lastSale = s.date;
+    });
+  });
+
+  const topProducts = Object.entries(productSales).sort((a, b) => b[1].revenue - a[1].revenue).slice(0, 10);
+
+  const stoppedProducts = Object.entries(productSales)
+    .filter(([, data]) => (Date.now() - new Date(data.lastSale).getTime()) / (1000 * 60 * 60 * 24) > 30)
+    .sort((a, b) => a[1].lastSale.localeCompare(b[1].lastSale));
+
+  const revenueByChannel: Record<string, number> = {};
+  sales.forEach((s) => {
+    const label = s.channel === "loja_fisica" ? "Loja Física" : s.channel === "ecommerce" ? "E-commerce" : s.channel === "marketplace" ? "Marketplace" : "WhatsApp";
+    revenueByChannel[label] = (revenueByChannel[label] || 0) + s.total;
+  });
+  const maxChannel = Math.max(...Object.values(revenueByChannel), 1);
+  const channelColors: Record<string, string> = {
+    "Loja Física": "#378ADD", "E-commerce": "#1D9E75", Marketplace: "#EF9F27", WhatsApp: "#3C3489",
+  };
 
   const recentClients = clients.slice(0, 5);
   const recentActivities: { icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>; bg: string; color: string; text: string; time: string }[] = [];
@@ -127,14 +142,16 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="metrics">
-        {metrics.map((m) => (
-          <div key={m.label} className="metric-card">
-            <div className="metric-label">{m.label}</div>
-            <div className="metric-value">{m.value}</div>
-            <div className={`metric-change ${m.up ? "up" : "down"}`}>
-              {m.up ? <IconTrendingUp size={12} /> : <IconTrendingDown size={12} />}
-              {" "}{m.change}
+      <div className="bi-kpis">
+        {kpis.map((k) => (
+          <div key={k.label} className="bi-kpi-card">
+            <div className="bi-kpi-icon" style={{ background: k.bg, color: k.color }}>
+              <k.icon size={20} />
+            </div>
+            <div className="bi-kpi-info">
+              <span className="bi-kpi-label">{k.label}</span>
+              <span className="bi-kpi-value">{k.value}</span>
+              <span className="bi-kpi-sub">{k.sub}</span>
             </div>
           </div>
         ))}
@@ -157,62 +174,127 @@ export default function Dashboard() {
               </div>
             </div>
           ))}
-
-          <div className="chart-section">
-            <div className="card-title">Receita por mês</div>
-            <div className="chart-bars">
-              {monthlyRevenue.map((b) => (
-                <div key={b.label} className="bar-col">
-                  <div className="bar-col-fill" style={{ height: `${b.pct}%`, background: b.color }} />
-                  <div className="bar-col-label">{b.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
-        <div className="right-col">
-          <div className="card">
-            <div className="card-header">
-              <div className="card-title">Contatos recentes</div>
-              <div className="card-link">Ver todos →</div>
-            </div>
-            {recentClients.map((c) => {
-              const b = badgeMap[c.status] || badgeMap.lead;
-              return (
-                <div key={c.id} className="contact-row">
-                  <div className="c-avatar" style={{ background: b.bg, color: b.color }}>
-                    {initials(c.name)}
-                  </div>
-                  <div className="contact-info">
-                    <div className="contact-name">{c.name}</div>
-                    <div className="contact-company">{c.email}</div>
-                  </div>
-                  <span className={`badge badge-${b.badge}`}>{b.label}</span>
-                </div>
-              );
-            })}
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">Faturamento Mensal</div>
           </div>
-
-          <div className="card">
-            <div className="card-header">
-              <div className="card-title">Atividade recente</div>
-              <div className="card-link">Ver tudo →</div>
-            </div>
-            {recentActivities.map((a, i) => (
-              <div key={i} className="activity-row">
-                <div className="act-icon" style={{ background: a.bg }}>
-                  <a.icon size={14} style={{ color: a.color }} />
-                </div>
-                <div>
-                  <div className="act-text" dangerouslySetInnerHTML={{ __html: a.text }} />
-                  <div className="act-time">{a.time}</div>
-                </div>
+          <div className="bi-chart">
+            {salesMonthlyRevenue.map((m) => (
+              <div key={m.month} className="bi-chart-col">
+                <div className="bi-chart-val">{formatShortCurrency(m.value)}</div>
+                <div className="bi-chart-bar" style={{ height: `${Math.max((m.value / maxRevenue) * 100, 4)}%`, background: "#378ADD" }} />
+                <div className="bi-chart-label">{m.month}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      <div className="two-col">
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">Receita por Canal</div>
+          </div>
+          <div className="bi-channel-list">
+            {Object.entries(revenueByChannel).map(([channel, value]) => (
+              <div key={channel} className="bi-channel-row">
+                <div className="bi-channel-top">
+                  <span>{channel}</span>
+                  <span>{formatCurrency(value)}</span>
+                </div>
+                <div className="bar-bg">
+                  <div className="bar-fill" style={{ width: `${(value / maxChannel) * 100}%`, background: channelColors[channel] }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">Top 10 Produtos</div>
+          </div>
+          <div className="bi-rank-list">
+            {topProducts.map(([product, data], i) => (
+              <div key={product} className="bi-rank-item">
+                <span className="bi-rank-pos">{i + 1}º</span>
+                <div className="bi-rank-info">
+                  <span className="bi-rank-name">{product}</span>
+                  <span className="bi-rank-brand">{data.qty} unidades</span>
+                </div>
+                <span className="bi-rank-value">{formatCurrency(data.revenue)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="two-col">
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">Contatos recentes</div>
+          </div>
+          {recentClients.map((c) => {
+            const b = badgeMap[c.status] || badgeMap.lead;
+            return (
+              <div key={c.id} className="contact-row">
+                <div className="c-avatar" style={{ background: b.bg, color: b.color }}>
+                  {initials(c.name)}
+                </div>
+                <div className="contact-info">
+                  <div className="contact-name">{c.name}</div>
+                  <div className="contact-company">{c.email}</div>
+                </div>
+                <span className={`badge badge-${b.badge}`}>{b.label}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">Atividade recente</div>
+          </div>
+          {recentActivities.map((a, i) => (
+            <div key={i} className="activity-row">
+              <div className="act-icon" style={{ background: a.bg }}>
+                <a.icon size={14} style={{ color: a.color }} />
+              </div>
+              <div>
+                <div className="act-text" dangerouslySetInnerHTML={{ __html: a.text }} />
+                <div className="act-time">{a.time}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {stoppedProducts.length > 0 && (
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">
+              <IconAlertTriangle size={14} style={{ color: "#D85A30" }} />
+              Produtos Parados (+30 dias)
+            </div>
+          </div>
+          <div className="bi-rank-list">
+            {stoppedProducts.slice(0, 8).map(([product, data]) => {
+              const days = Math.round((Date.now() - new Date(data.lastSale).getTime()) / (1000 * 60 * 60 * 24));
+              return (
+                <div key={product} className="bi-rank-item">
+                  <div className="bi-rank-info">
+                    <span className="bi-rank-name">{product}</span>
+                    <span className="bi-rank-brand">{data.qty} unidades · última venda há {days} dias</span>
+                  </div>
+                  <span className="bi-rank-value bi-stopped">{days}d</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </>
   );
 }

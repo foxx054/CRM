@@ -12,7 +12,6 @@ import "./Layout.css";
 
 const pageTitles: Record<string, string> = {
   "/": "Dashboard",
-  "/dashboard": "Indicadores",
   "/cliente": "Cliente",
   "/empresas": "Empresas",
   "/negocios": "Negócios",
