@@ -17,7 +17,7 @@ const navSections = [
     label: "Principal",
     items: [
       { to: "/", label: "Dashboard", icon: IconDashboard },
-      { to: "/contatos", label: "Contatos", icon: IconUsers },
+      { to: "/cliente", label: "Cliente", icon: IconUsers },
       { to: "/empresas", label: "Empresas", icon: IconBuilding },
       { to: "/negocios", label: "Negócios", icon: IconBriefcase },
     ],

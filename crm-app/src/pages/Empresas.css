@@ -1,0 +1,41 @@
+.empresas-page {
+  max-width: 1200px;
+}
+
+.empresas-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.cell-cnpj {
+  font-family: "SF Mono", "Consolas", "Liberation Mono", monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.cell-areas {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* wider modal for company form */
+.modal-wide {
+  width: 640px !important;
+}
+
+.modal-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.modal-row.triple {
+  grid-template-columns: 1fr 1fr 1fr;
+}

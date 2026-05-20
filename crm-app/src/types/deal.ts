@@ -1,4 +1,9 @@
-export type DealStage = "prospecting" | "qualification" | "proposal" | "closed";
+export type DealStage =
+  | "atendimento"
+  | "orcamento"
+  | "negociacao"
+  | "venda_concluida"
+  | "pos_venda";
 
 export interface Deal {
   id: string;
@@ -11,15 +16,17 @@ export interface Deal {
 }
 
 export const stageLabels: Record<DealStage, string> = {
-  prospecting: "Prospecção",
-  qualification: "Qualificação",
-  proposal: "Proposta",
-  closed: "Fechado",
+  atendimento: "Atendimento",
+  orcamento: "Orçamento",
+  negociacao: "Negociação",
+  venda_concluida: "Venda Concluída",
+  pos_venda: "Pós-Venda",
 };
 
 export const stageColors: Record<DealStage, string> = {
-  prospecting: "var(--accent)",
-  qualification: "var(--warning)",
-  proposal: "var(--danger)",
-  closed: "var(--success)",
+  atendimento: "#378ADD",
+  orcamento: "#EF9F27",
+  negociacao: "#D85A30",
+  venda_concluida: "#1D9E75",
+  pos_venda: "#3C3489",
 };

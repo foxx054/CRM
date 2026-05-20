@@ -7,6 +7,7 @@ import Clients from "./pages/Clients";
 import Deals from "./pages/Deals";
 import Tasks from "./pages/Tasks";
 import Pipeline from "./pages/Pipeline";
+import Empresas from "./pages/Empresas";
 import EmptyPage from "./pages/EmptyPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -23,8 +24,8 @@ function AppRoutes() {
       <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/contatos" element={<Clients />} />
-        <Route path="/empresas" element={<EmptyPage title="Empresas" />} />
+        <Route path="/cliente" element={<Clients />} />
+        <Route path="/empresas" element={<Empresas />} />
         <Route path="/negocios" element={<Deals />} />
         <Route path="/pipeline" element={<Pipeline />} />
         <Route path="/tarefas" element={<Tasks />} />

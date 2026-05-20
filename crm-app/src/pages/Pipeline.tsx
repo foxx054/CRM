@@ -9,26 +9,26 @@ import { stageLabels, stageColors } from "../types/deal";
 import "./Pipeline.css";
 
 const mockDeals: Deal[] = [
-  { id: "1", title: "Site institucional", company: "Tech Ltda", value: 15000, stage: "prospecting", contactName: "João Silva", createdAt: "2025-05-01" },
-  { id: "2", title: "App mobile", company: "Digital Agency", value: 45000, stage: "prospecting", contactName: "Lucas Oliveira", createdAt: "2025-05-10" },
-  { id: "3", title: "Rebranding", company: "Design Studio", value: 12000, stage: "qualification", contactName: "Maria Souza", createdAt: "2025-04-20" },
-  { id: "4", title: "Consultoria SEO", company: "Construtora ABC", value: 8000, stage: "qualification", contactName: "Carlos Pereira", createdAt: "2025-04-15" },
-  { id: "5", title: "Sistema de gestão", company: "Saúde Plus", value: 60000, stage: "proposal", contactName: "Ana Costa", createdAt: "2025-03-10" },
-  { id: "6", title: "Suporte mensal", company: "Tech Ltda", value: 3000, stage: "closed", contactName: "João Silva", createdAt: "2025-02-01" },
-  { id: "7", title: "Cloud migration", company: "DataBridge SA", value: 35000, stage: "prospecting", contactName: "Rodrigo Oliveira", createdAt: "2025-05-12" },
-  { id: "8", title: "E-commerce B2B", company: "Grupo Nórdico", value: 52000, stage: "qualification", contactName: "Carlos Silva", createdAt: "2025-04-28" },
-  { id: "9", title: "Treinamento equipe", company: "TechSul Ltda", value: 9000, stage: "proposal", contactName: "Ana Martins", createdAt: "2025-03-22" },
-  { id: "10", title: "Suporte premium", company: "Inova Soluções", value: 18000, stage: "proposal", contactName: "Julia Pereira", createdAt: "2025-03-15" },
-  { id: "11", title: "Hospedagem dedicada", company: "Construtora ABC", value: 24000, stage: "closed", contactName: "Carlos Pereira", createdAt: "2025-01-20" },
-  { id: "12", title: "App mobile v2", company: "Digital Agency", value: 38000, stage: "closed", contactName: "Lucas Oliveira", createdAt: "2025-02-28" },
+  { id: "1", title: "Sala de estar completa", company: "Lojas Becker", value: 8500, stage: "atendimento", contactName: "Ana Martins", createdAt: "2025-05-15" },
+  { id: "2", title: "Kit cozinha industrial", company: "Lojas Becker", value: 12000, stage: "atendimento", contactName: "Carlos Silva", createdAt: "2025-05-14" },
+  { id: "3", title: "Home theater", company: "Lojas Becker", value: 4500, stage: "orcamento", contactName: "Julia Pereira", createdAt: "2025-05-10" },
+  { id: "4", title: "Móveis quarto casal", company: "Lojas Becker", value: 3200, stage: "orcamento", contactName: "Rodrigo Oliveira", createdAt: "2025-05-08" },
+  { id: "5", title: "Ar condicionado 12000 BTUs", company: "Lojas Becker", value: 2800, stage: "negociacao", contactName: "Maria Souza", createdAt: "2025-05-05" },
+  { id: "6", title: "Máquina de lavar + secadora", company: "Lojas Becker", value: 4200, stage: "negociacao", contactName: "João Silva", createdAt: "2025-05-03" },
+  { id: "7", title: "Smart TV 55\"", company: "Lojas Becker", value: 3500, stage: "venda_concluida", contactName: "Lucas Oliveira", createdAt: "2025-04-28" },
+  { id: "8", title: "Geladeira frost free", company: "Lojas Becker", value: 3800, stage: "venda_concluida", contactName: "Ana Costa", createdAt: "2025-04-25" },
+  { id: "9", title: "Suporte técnico TV", company: "Lojas Becker", value: 150, stage: "pos_venda", contactName: "Carlos Pereira", createdAt: "2025-04-20" },
+  { id: "10", title: "Troca de produto", company: "Lojas Becker", value: 0, stage: "pos_venda", contactName: "Maria Souza", createdAt: "2025-04-18" },
+  { id: "11", title: "Fogão 5 bocas", company: "Lojas Becker", value: 2200, stage: "orcamento", contactName: "Pedro Lima", createdAt: "2025-05-12" },
+  { id: "12", title: "Cama box casal", company: "Lojas Becker", value: 1800, stage: "atendimento", contactName: "Camila Rocha", createdAt: "2025-05-16" },
 ];
 
-const stages: DealStage[] = ["prospecting", "qualification", "proposal", "closed"];
+const stages: DealStage[] = ["atendimento", "orcamento", "negociacao", "venda_concluida", "pos_venda"];
 
 const conversionRates = [
-  { from: "Prospecção → Qualificação", rate: 68 },
-  { from: "Qualificação → Proposta", rate: 52 },
-  { from: "Proposta → Fechado", rate: 38 },
+  { from: "Atendimento → Orçamento", rate: 75 },
+  { from: "Orçamento → Negociação", rate: 55 },
+  { from: "Negociação → Venda Concluída", rate: 42 },
 ];
 
 const monthlyRevenue = [
@@ -40,21 +40,23 @@ const monthlyRevenue = [
   { month: "Mai", value: 42000 },
 ];
 
+const closedStages: DealStage[] = ["venda_concluida", "pos_venda"];
+
 function formatCurrency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
 export default function Pipeline() {
   const totalPipeline = mockDeals.reduce((s, d) => s + d.value, 0);
-  const activeDeals = mockDeals.filter((d) => d.stage !== "closed").length;
-  const closedDeals = mockDeals.filter((d) => d.stage === "closed");
+  const activeDeals = mockDeals.filter((d) => !closedStages.includes(d.stage)).length;
+  const closedDeals = mockDeals.filter((d) => closedStages.includes(d.stage));
   const closedValue = closedDeals.reduce((s, d) => s + d.value, 0);
   const avgDeal = Math.round(totalPipeline / mockDeals.length);
 
   const stageData = stages.map((stage) => {
     const deals = mockDeals.filter((d) => d.stage === stage);
     const total = deals.reduce((s, d) => s + d.value, 0);
-    const maxValue = 95000;
+    const maxValue = 75000;
     return { stage, deals, total, pct: Math.round((total / maxValue) * 100) };
   });
 
@@ -84,7 +86,7 @@ export default function Pipeline() {
             <IconTrendingUp size={18} />
           </div>
           <div>
-            <div className="pl-metric-label">Fechados no período</div>
+            <div className="pl-metric-label">Concluídos no período</div>
             <div className="pl-metric-value">{closedDeals.length} ({formatCurrency(closedValue)})</div>
           </div>
         </div>

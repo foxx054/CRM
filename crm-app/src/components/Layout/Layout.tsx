@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useAuth } from "../../contexts/AuthContext";
 import { IconSearch, IconPlus, IconLogout } from "@tabler/icons-react";
@@ -6,7 +6,7 @@ import "./Layout.css";
 
 const pageTitles: Record<string, string> = {
   "/": "Dashboard",
-  "/contatos": "Contatos",
+  "/cliente": "Cliente",
   "/empresas": "Empresas",
   "/negocios": "Negócios",
   "/pipeline": "Pipeline",
@@ -18,6 +18,7 @@ const pageTitles: Record<string, string> = {
 
 export default function Layout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { logout, user } = useAuth();
   const title = pageTitles[location.pathname] || "CRM";
 
@@ -32,7 +33,7 @@ export default function Layout() {
               <IconSearch size={16} />
               Buscar...
             </div>
-            <button className="btn btn-primary">
+            <button className="btn btn-primary" onClick={() => navigate("/negocios", { state: { novoNegocio: true } })}>
               <IconPlus size={16} />
               Novo negócio
             </button>

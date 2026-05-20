@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   DndContext,
   DragOverlay,
@@ -12,18 +13,24 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-
 import { CSS } from "@dnd-kit/utilities";
 import type { Deal, DealStage } from "../types/deal";
 import { stageLabels, stageColors } from "../types/deal";
+import DealFormModal from "../components/DealFormModal";
+import "../components/ClientFormModal.css";
 import "./Deals.css";
 
 const initialDeals: Deal[] = [
-  { id: "1", title: "Site institucional", company: "Tech Ltda", value: 15000, stage: "prospecting", contactName: "João Silva", createdAt: "2025-05-01" },
-  { id: "2", title: "App mobile", company: "Digital Agency", value: 45000, stage: "prospecting", contactName: "Lucas Oliveira", createdAt: "2025-05-10" },
-  { id: "3", title: "Rebranding", company: "Design Studio", value: 12000, stage: "qualification", contactName: "Maria Souza", createdAt: "2025-04-20" },
-  { id: "4", title: "Consultoria SEO", company: "Construtora ABC", value: 8000, stage: "qualification", contactName: "Carlos Pereira", createdAt: "2025-04-15" },
-  { id: "5", title: "Sistema de gestão", company: "Saúde Plus", value: 60000, stage: "proposal", contactName: "Ana Costa", createdAt: "2025-03-10" },
-  { id: "6", title: "Suporte mensal", company: "Tech Ltda", value: 3000, stage: "closed", contactName: "João Silva", createdAt: "2025-02-01" },
+  { id: "1", title: "Sala de estar completa", company: "Lojas Becker", value: 8500, stage: "atendimento", contactName: "Ana Martins", createdAt: "2025-05-15" },
+  { id: "2", title: "Kit cozinha industrial", company: "Lojas Becker", value: 12000, stage: "atendimento", contactName: "Carlos Silva", createdAt: "2025-05-14" },
+  { id: "3", title: "Home theater", company: "Lojas Becker", value: 4500, stage: "orcamento", contactName: "Julia Pereira", createdAt: "2025-05-10" },
+  { id: "4", title: "Móveis quarto casal", company: "Lojas Becker", value: 3200, stage: "orcamento", contactName: "Rodrigo Oliveira", createdAt: "2025-05-08" },
+  { id: "5", title: "Ar condicionado 12000 BTUs", company: "Lojas Becker", value: 2800, stage: "negociacao", contactName: "Maria Souza", createdAt: "2025-05-05" },
+  { id: "6", title: "Máquina de lavar + secadora", company: "Lojas Becker", value: 4200, stage: "negociacao", contactName: "João Silva", createdAt: "2025-05-03" },
+  { id: "7", title: "Smart TV 55\"", company: "Lojas Becker", value: 3500, stage: "venda_concluida", contactName: "Lucas Oliveira", createdAt: "2025-04-28" },
+  { id: "8", title: "Geladeira frost free", company: "Lojas Becker", value: 3800, stage: "venda_concluida", contactName: "Ana Costa", createdAt: "2025-04-25" },
+  { id: "9", title: "Suporte técnico TV", company: "Lojas Becker", value: 150, stage: "pos_venda", contactName: "Carlos Pereira", createdAt: "2025-04-20" },
+  { id: "10", title: "Troca de produto", company: "Lojas Becker", value: 0, stage: "pos_venda", contactName: "Maria Souza", createdAt: "2025-04-18" },
 ];
 
-const stages: DealStage[] = ["prospecting", "qualification", "proposal", "closed"];
+const stages: DealStage[] = ["atendimento", "orcamento", "negociacao", "venda_concluida", "pos_venda"];
 
 function formatCurrency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -74,12 +81,31 @@ function Column({
 }
 
 export default function Deals() {
+  const location = useLocation();
   const [deals, setDeals] = useState<Deal[]>(initialDeals);
   const [activeDeal, setActiveDeal] = useState<Deal | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
+
+  useEffect(() => {
+    if ((location.state as { novoNegocio?: boolean })?.novoNegocio) {
+      setModalOpen(true);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
+
+  function handleSave(data: Omit<Deal, "id" | "createdAt">) {
+    const newDeal: Deal = {
+      id: crypto.randomUUID(),
+      ...data,
+      createdAt: new Date().toISOString().slice(0, 10),
+    };
+    setDeals((prev) => [newDeal, ...prev]);
+  }
 
   function handleDragStart(event: DragStartEvent) {
     const deal = deals.find((d) => d.id === event.active.id);
@@ -134,6 +160,9 @@ export default function Deals() {
           <h1>Negócios</h1>
           <p className="subtitle">{deals.length} negócios no pipeline</p>
         </div>
+        <button className="btn btn-primary" onClick={() => setModalOpen(true)}>
+          + Novo Negócio
+        </button>
       </div>
 
       <DndContext
@@ -157,6 +186,13 @@ export default function Deals() {
           ) : null}
         </DragOverlay>
       </DndContext>
+
+      <DealFormModal
+        open={modalOpen}
+        deal={editingDeal}
+        onClose={() => { setModalOpen(false); setEditingDeal(null); }}
+        onSave={handleSave}
+      />
     </div>
   );
 }
