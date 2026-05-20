@@ -183,6 +183,23 @@
   background: none;
 }
 
+.btn-icon-only {
+  background: none;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon-only:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
 /* ── Content ── */
 .content {
   padding: 18px 20px;
