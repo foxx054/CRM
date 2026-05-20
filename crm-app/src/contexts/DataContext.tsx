@@ -26,11 +26,11 @@ interface DataContextType {
 }
 
 const defaultClients: Client[] = [
-  { id: "c1", name: "João Silva", cpf: "529.982.247-25", email: "joao@exemplo.com", phone: "(11) 99999-0001", totalSpent: 12500, status: "active", createdAt: "2025-01-15" },
-  { id: "c2", name: "Maria Souza", cpf: "384.561.739-10", email: "maria@exemplo.com", phone: "(11) 99999-0002", totalSpent: 3200, status: "lead", createdAt: "2025-03-20" },
-  { id: "c3", name: "Carlos Pereira", cpf: "176.438.902-55", email: "carlos@exemplo.com", phone: "(11) 99999-0003", totalSpent: 8700, status: "inactive", createdAt: "2025-02-10" },
-  { id: "c4", name: "Ana Martins", cpf: "721.845.963-00", email: "ana@exemplo.com", phone: "(11) 99999-0004", totalSpent: 4500, status: "active", createdAt: "2025-04-01" },
-  { id: "c5", name: "Pedro Lima", cpf: "638.291.475-88", email: "pedro@exemplo.com", phone: "(11) 99999-0005", totalSpent: 2200, status: "lead", createdAt: "2025-05-10" },
+  { id: "c1", name: "João Silva", cpf: "529.982.247-25", email: "joao@exemplo.com", phone: "(11) 99999-0001", totalSpent: 12500, status: "active", favoriteProducts: "Smart TVs, Geladeiras", favoriteBrand: "Samsung", preferredCategory: "Eletrodomésticos", purchaseFrequency: "Mensal", preferredChannel: "WhatsApp", createdAt: "2025-01-15" },
+  { id: "c2", name: "Maria Souza", cpf: "384.561.739-10", email: "maria@exemplo.com", phone: "(11) 99999-0002", totalSpent: 3200, status: "lead", favoriteProducts: "Móveis para sala", favoriteBrand: "Móveis Becker", preferredCategory: "Móveis", purchaseFrequency: "Trimestral", preferredChannel: "E-mail", createdAt: "2025-03-20" },
+  { id: "c3", name: "Carlos Pereira", cpf: "176.438.902-55", email: "carlos@exemplo.com", phone: "(11) 99999-0003", totalSpent: 8700, status: "inactive", favoriteProducts: "Ferramentas, Tintas", favoriteBrand: "Vonder", preferredCategory: "Materiais de Construção", purchaseFrequency: "Semestral", preferredChannel: "Ligação", createdAt: "2025-02-10" },
+  { id: "c4", name: "Ana Martins", cpf: "721.845.963-00", email: "ana@exemplo.com", phone: "(11) 99999-0004", totalSpent: 4500, status: "active", favoriteProducts: "Notebooks, Monitores", favoriteBrand: "Dell", preferredCategory: "Informática", purchaseFrequency: "Mensal", preferredChannel: "WhatsApp", createdAt: "2025-04-01" },
+  { id: "c5", name: "Pedro Lima", cpf: "638.291.475-88", email: "pedro@exemplo.com", phone: "(11) 99999-0005", totalSpent: 2200, status: "lead", favoriteProducts: "Telefones, Fones", favoriteBrand: "Xiaomi", preferredCategory: "Telefonia", purchaseFrequency: "Quinzenal", preferredChannel: "E-mail", createdAt: "2025-05-10" },
 ];
 
 const defaultCompanies: Company[] = [

@@ -1,5 +1,12 @@
 import type { Client } from "../types/client";
 import { useData } from "../contexts/DataContext";
+import {
+  IconHeart,
+  IconStar,
+  IconCategory,
+  IconCalendarStats,
+  IconDeviceMobile,
+} from "@tabler/icons-react";
 import "./ClientDetailModal.css";
 
 interface Props {
@@ -59,6 +66,47 @@ export default function ClientDetailModal({ client, onClose }: Props) {
               <span className={`status status-${client.status}`}>
                 {client.status === "active" ? "Ativo" : client.status === "inactive" ? "Inativo" : "Lead"}
               </span>
+            </div>
+          </div>
+
+          <div className="detail-section">
+            <h3>Preferências</h3>
+            <div className="prefs-grid">
+              <div className="pref-item">
+                <IconHeart size={14} />
+                <div>
+                  <span className="pref-label">Produtos favoritos</span>
+                  <span className="pref-value">{client.favoriteProducts || "—"}</span>
+                </div>
+              </div>
+              <div className="pref-item">
+                <IconStar size={14} />
+                <div>
+                  <span className="pref-label">Marca favorita</span>
+                  <span className="pref-value">{client.favoriteBrand || "—"}</span>
+                </div>
+              </div>
+              <div className="pref-item">
+                <IconCategory size={14} />
+                <div>
+                  <span className="pref-label">Categoria preferida</span>
+                  <span className="pref-value">{client.preferredCategory || "—"}</span>
+                </div>
+              </div>
+              <div className="pref-item">
+                <IconCalendarStats size={14} />
+                <div>
+                  <span className="pref-label">Frequência de compra</span>
+                  <span className="pref-value">{client.purchaseFrequency || "—"}</span>
+                </div>
+              </div>
+              <div className="pref-item">
+                <IconDeviceMobile size={14} />
+                <div>
+                  <span className="pref-label">Canal preferido</span>
+                  <span className="pref-value">{client.preferredChannel || "—"}</span>
+                </div>
+              </div>
             </div>
           </div>
 

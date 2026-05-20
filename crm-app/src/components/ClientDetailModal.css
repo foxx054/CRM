@@ -69,3 +69,38 @@
   font-weight: 500;
   border-top: 1px solid var(--border);
 }
+
+.prefs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pref-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+}
+
+.pref-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pref-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+}
+
+.pref-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}

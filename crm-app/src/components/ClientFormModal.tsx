@@ -15,6 +15,11 @@ const emptyForm: Omit<Client, "id" | "createdAt"> = {
   phone: "",
   totalSpent: 0,
   status: "lead",
+  favoriteProducts: "",
+  favoriteBrand: "",
+  preferredCategory: "",
+  purchaseFrequency: "",
+  preferredChannel: "",
 };
 
 export default function ClientFormModal({ open, client, onClose, onSave }: Props) {
@@ -29,6 +34,11 @@ export default function ClientFormModal({ open, client, onClose, onSave }: Props
         phone: client.phone,
         totalSpent: client.totalSpent,
         status: client.status,
+        favoriteProducts: client.favoriteProducts,
+        favoriteBrand: client.favoriteBrand,
+        preferredCategory: client.preferredCategory,
+        purchaseFrequency: client.purchaseFrequency,
+        preferredChannel: client.preferredChannel,
       });
     } else {
       setForm(emptyForm);
@@ -107,6 +117,51 @@ export default function ClientFormModal({ open, client, onClose, onSave }: Props
                 <option value="lead">Lead</option>
                 <option value="active">Ativo</option>
                 <option value="inactive">Inativo</option>
+              </select>
+            </label>
+            <hr className="divider" />
+            <h3 className="section-title">Preferências</h3>
+            <label>
+              Produtos favoritos
+              <input value={form.favoriteProducts} onChange={(e) => setForm({ ...form, favoriteProducts: e.target.value })} placeholder="Smart TVs, Geladeiras" />
+            </label>
+            <label>
+              Marca favorita
+              <input value={form.favoriteBrand} onChange={(e) => setForm({ ...form, favoriteBrand: e.target.value })} placeholder="Samsung" />
+            </label>
+            <label>
+              Categoria preferida
+              <select value={form.preferredCategory} onChange={(e) => setForm({ ...form, preferredCategory: e.target.value })}>
+                <option value="">Selecione</option>
+                <option value="Eletrodomésticos">Eletrodomésticos</option>
+                <option value="Móveis">Móveis</option>
+                <option value="Informática">Informática</option>
+                <option value="Telefonia">Telefonia</option>
+                <option value="Materiais de Construção">Materiais de Construção</option>
+                <option value="Ferramentas">Ferramentas</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </label>
+            <label>
+              Frequência de compra
+              <select value={form.purchaseFrequency} onChange={(e) => setForm({ ...form, purchaseFrequency: e.target.value })}>
+                <option value="">Selecione</option>
+                <option value="Semanal">Semanal</option>
+                <option value="Quinzenal">Quinzenal</option>
+                <option value="Mensal">Mensal</option>
+                <option value="Trimestral">Trimestral</option>
+                <option value="Semestral">Semestral</option>
+                <option value="Anual">Anual</option>
+              </select>
+            </label>
+            <label>
+              Canal preferido
+              <select value={form.preferredChannel} onChange={(e) => setForm({ ...form, preferredChannel: e.target.value })}>
+                <option value="">Selecione</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="E-mail">E-mail</option>
+                <option value="Ligação">Ligação</option>
+                <option value="Presencial">Presencial</option>
               </select>
             </label>
           </div>

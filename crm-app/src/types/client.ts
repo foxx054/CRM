@@ -6,5 +6,10 @@ export interface Client {
   phone: string;
   totalSpent: number;
   status: "active" | "inactive" | "lead";
+  favoriteProducts: string;
+  favoriteBrand: string;
+  preferredCategory: string;
+  purchaseFrequency: string;
+  preferredChannel: string;
   createdAt: string;
 }
