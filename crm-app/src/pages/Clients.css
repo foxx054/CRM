@@ -87,6 +87,11 @@ tbody tr:hover {
   color: var(--text-secondary);
 }
 
+.cell-spent {
+  font-weight: 600;
+  color: var(--accent);
+}
+
 .cell-date {
   color: var(--text-secondary);
   white-space: nowrap;

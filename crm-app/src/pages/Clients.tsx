@@ -5,10 +5,14 @@ import "../components/ClientFormModal.css";
 import "./Clients.css";
 
 const initialClients: Client[] = [
-  { id: "1", name: "João Silva", cpf: "529.982.247-25", email: "joao@exemplo.com", phone: "(11) 99999-0001", status: "active", createdAt: "2025-01-15" },
-  { id: "2", name: "Maria Souza", cpf: "384.561.739-10", email: "maria@exemplo.com", phone: "(11) 99999-0002", status: "lead", createdAt: "2025-03-20" },
-  { id: "3", name: "Carlos Pereira", cpf: "176.438.902-55", email: "carlos@exemplo.com", phone: "(11) 99999-0003", status: "inactive", createdAt: "2025-02-10" },
+  { id: "1", name: "João Silva", cpf: "529.982.247-25", email: "joao@exemplo.com", phone: "(11) 99999-0001", totalSpent: 12500, status: "active", createdAt: "2025-01-15" },
+  { id: "2", name: "Maria Souza", cpf: "384.561.739-10", email: "maria@exemplo.com", phone: "(11) 99999-0002", totalSpent: 3200, status: "lead", createdAt: "2025-03-20" },
+  { id: "3", name: "Carlos Pereira", cpf: "176.438.902-55", email: "carlos@exemplo.com", phone: "(11) 99999-0003", totalSpent: 8700, status: "inactive", createdAt: "2025-02-10" },
 ];
+
+function formatCurrency(value: number) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
 
 function formatDate(dateStr: string) {
   return new Date(dateStr + "T12:00:00").toLocaleDateString("pt-BR");
@@ -21,7 +25,7 @@ export default function Clients() {
   const [editingClient, setEditingClient] = useState<Client | null>(null);
 
   const filtered = clients.filter((c) =>
-    [c.name, c.cpf, c.email, c.phone].some((field) =>
+    [c.name, c.cpf, c.email, c.phone, String(c.totalSpent)].some((field) =>
       field.toLowerCase().includes(search.toLowerCase())
     )
   );
@@ -91,6 +95,7 @@ export default function Clients() {
               <th>CPF</th>
               <th>Email</th>
               <th>Telefone</th>
+              <th>Total Gasto</th>
               <th>Status</th>
               <th>Cadastro</th>
               <th></th>
@@ -103,6 +108,7 @@ export default function Clients() {
                 <td className="cell-cpf">{client.cpf}</td>
                 <td>{client.email}</td>
                 <td>{client.phone}</td>
+                <td className="cell-spent">{formatCurrency(client.totalSpent)}</td>
                 <td>
                   <span className={`status status-${client.status}`}>
                     {statusLabels[client.status]}
@@ -121,7 +127,7 @@ export default function Clients() {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="empty">
+                <td colSpan={8} className="empty">
                   Nenhum cliente encontrado
                 </td>
               </tr>

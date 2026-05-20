@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import {
   IconDashboard,
   IconUsers,
@@ -12,34 +13,39 @@ import {
   IconChartDots,
 } from "@tabler/icons-react";
 
-const navSections = [
-  {
-    label: "Principal",
-    items: [
-      { to: "/", label: "Dashboard", icon: IconDashboard },
-      { to: "/cliente", label: "Cliente", icon: IconUsers },
-      { to: "/empresas", label: "Empresas", icon: IconBuilding },
-      { to: "/negocios", label: "Negócios", icon: IconBriefcase },
-    ],
-  },
-  {
-    label: "Vendas",
-    items: [
-      { to: "/pipeline", label: "Pipeline", icon: IconChartBar },
-      { to: "/tarefas", label: "Tarefas", icon: IconChecklist },
-      { to: "/agenda", label: "Agenda", icon: IconCalendar },
-    ],
-  },
-  {
-    label: "Análise",
-    items: [
-      { to: "/relatorios", label: "Relatórios", icon: IconReportAnalytics },
-      { to: "/configuracoes", label: "Configurações", icon: IconSettings },
-    ],
-  },
-];
+  const navSections = [
+    {
+      label: "Principal",
+      items: [
+        { to: "/", label: "Dashboard", icon: IconDashboard },
+        { to: "/cliente", label: "Cliente", icon: IconUsers },
+        { to: "/empresas", label: "Empresas", icon: IconBuilding },
+        { to: "/negocios", label: "Negócios", icon: IconBriefcase },
+      ],
+    },
+    {
+      label: "Vendas",
+      items: [
+        { to: "/pipeline", label: "Pipeline", icon: IconChartBar },
+        { to: "/tarefas", label: "Tarefas", icon: IconChecklist },
+        { to: "/agenda", label: "Agenda", icon: IconCalendar },
+      ],
+    },
+    {
+      label: "Análise",
+      items: [
+        { to: "/relatorios", label: "Relatórios", icon: IconReportAnalytics },
+        { to: "/configuracoes", label: "Configurações", icon: IconSettings },
+      ],
+    },
+  ];
 
 export default function Sidebar() {
+  const { user } = useAuth();
+  const initials = user?.username
+    ? user.username.substring(0, 2).toUpperCase()
+    : "??";
+
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
@@ -67,10 +73,9 @@ export default function Sidebar() {
       ))}
       <div className="sidebar-bottom">
         <div className="user-chip">
-          <div className="user-avatar">RF</div>
+          <div className="user-avatar">{initials}</div>
           <div className="user-info">
-            <p>Rafael F.</p>
-            <span>Gerente de Vendas</span>
+            <p>{user?.username}</p>
           </div>
         </div>
       </div>
