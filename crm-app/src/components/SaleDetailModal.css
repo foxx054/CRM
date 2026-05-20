@@ -1,0 +1,97 @@
+.modal-sale { width: 900px; max-width: 95vw; }
+
+.sale-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sale-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sale-info-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+}
+
+.sale-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.sale-items-table thead th {
+  text-align: left;
+  padding: 8px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  border-bottom: 0.5px solid var(--border);
+  white-space: nowrap;
+}
+
+.sale-items-table tbody td {
+  padding: 8px 6px;
+  border-bottom: 0.5px solid var(--border);
+  white-space: nowrap;
+}
+
+.cell-mono {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.cell-center {
+  text-align: center;
+}
+
+.sale-subtotals {
+  border-top: 0.5px solid var(--border);
+  padding-top: 10px;
+  margin-bottom: 20px;
+  max-width: 300px;
+  margin-left: auto;
+}
+
+.sale-sub-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.sale-discount { color: #D85A30; }
+
+.sale-total {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-primary);
+  border-top: 0.5px solid var(--border);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+
+.sale-payment-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.sale-payment-grid .status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  align-self: flex-start;
+}
