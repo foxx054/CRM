@@ -13,7 +13,6 @@ const emptyForm: Omit<Client, "id" | "createdAt"> = {
   cpf: "",
   email: "",
   phone: "",
-  company: "",
   status: "lead",
 };
 
@@ -27,7 +26,6 @@ export default function ClientFormModal({ open, client, onClose, onSave }: Props
         cpf: client.cpf,
         email: client.email,
         phone: client.phone,
-        company: client.company,
         status: client.status,
       });
     } else {
@@ -85,14 +83,6 @@ export default function ClientFormModal({ open, client, onClose, onSave }: Props
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 placeholder="(11) 99999-9999"
-              />
-            </label>
-            <label>
-              Empresa
-              <input
-                value={form.company}
-                onChange={(e) => setForm({ ...form, company: e.target.value })}
-                placeholder="Nome da empresa"
               />
             </label>
             <label>
