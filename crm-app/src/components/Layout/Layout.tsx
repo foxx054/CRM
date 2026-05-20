@@ -1,7 +1,10 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
+import SearchModal from "../SearchModal";
+import "../SearchModal.css";
 import { IconSearch, IconPlus, IconLogout, IconMoon, IconSun } from "@tabler/icons-react";
 import "./Layout.css";
 
@@ -23,6 +26,7 @@ export default function Layout() {
   const { logout, user } = useAuth();
   const { theme, toggle: toggleTheme } = useTheme();
   const title = pageTitles[location.pathname] || "CRM";
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <div className="layout">
@@ -31,10 +35,11 @@ export default function Layout() {
         <header className="topbar">
           <div className="topbar-title">{title}</div>
           <div className="topbar-actions">
-            <div className="search-box">
+            <div className="search-box" onClick={() => setSearchOpen(true)}>
               <IconSearch size={16} />
-              Buscar...
+              Buscar... <span className="search-hint">Ctrl+K</span>
             </div>
+            <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
             <button className="btn btn-primary" onClick={() => navigate("/negocios", { state: { novoNegocio: true } })}>
               <IconPlus size={16} />
               Novo negócio
