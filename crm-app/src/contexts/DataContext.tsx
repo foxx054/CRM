@@ -2,6 +2,7 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 import type { Client } from "../types/client";
 import type { Company } from "../types/company";
 import type { Deal } from "../types/deal";
+import type { Sale } from "../types/sale";
 
 interface Task {
   id: string;
@@ -16,10 +17,12 @@ interface DataContextType {
   companies: Company[];
   deals: Deal[];
   tasks: Task[];
+  sales: Sale[];
   setClients: React.Dispatch<React.SetStateAction<Client[]>>;
   setCompanies: React.Dispatch<React.SetStateAction<Company[]>>;
   setDeals: React.Dispatch<React.SetStateAction<Deal[]>>;
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  setSales: React.Dispatch<React.SetStateAction<Sale[]>>;
   addTask: (title: string, relatedTo?: string) => void;
   toggleTask: (id: string) => void;
   deleteTask: (id: string) => void;
@@ -57,6 +60,71 @@ const defaultTasks: Task[] = [
   { id: "t3", title: "Verificar disponibilidade de ar condicionado", done: true, relatedTo: "Maria Souza", createdAt: "2025-05-14" },
 ];
 
+const defaultSales: Sale[] = [
+  {
+    id: "s1", saleNumber: "V-2025-0001", date: "2025-05-10", store: "Lojas Becker - Cerro Largo", seller: "Carlos Vendedor", cashier: "Caixa 02",
+    channel: "loja_fisica", clientId: "c1", clientName: "João Silva",
+    items: [
+      { sku: "TV-55-SAM", barcode: "7891234560010", product: "Smart TV 55\" 4K", brand: "Samsung", category: "Eletrodomésticos", quantity: 1, unitPrice: 3500, discount: 150, taxes: 280, warranty: "12 meses" },
+      { sku: "SB-Q800", barcode: "7891234560027", product: "Soundbar Q800", brand: "Samsung", category: "Eletrodomésticos", quantity: 1, unitPrice: 1200, discount: 0, taxes: 96, warranty: "12 meses" },
+    ],
+    paymentMethod: "credit_card", installments: 6, cardBrand: "Mastercard", cashback: 45, paymentStatus: "paid", total: 4550,
+  },
+  {
+    id: "s2", saleNumber: "V-2025-0002", date: "2025-05-12", store: "Lojas Becker - Cerro Largo", seller: "Carlos Vendedor", cashier: "Caixa 01",
+      channel: "whatsapp", clientId: "c1", clientName: "João Silva",
+    items: [
+      { sku: "RF-440", barcode: "7891234560034", product: "Geladeira Frost Free 440L", brand: "Electrolux", category: "Eletrodomésticos", quantity: 1, unitPrice: 3800, discount: 200, taxes: 304, warranty: "24 meses" },
+    ],
+    paymentMethod: "pix", installments: 1, cardBrand: "", pixKey: "joao@exemplo.com", cashback: 76, paymentStatus: "paid", total: 3600,
+  },
+  {
+    id: "s3", saleNumber: "V-2025-0003", date: "2025-05-08", store: "Lojas Becker - Cerro Largo", seller: "Maria Atendente", cashier: "Caixa 03",
+      channel: "loja_fisica", clientId: "c2", clientName: "Maria Souza",
+    items: [
+      { sku: "MVS-3PC", barcode: "7891234560041", product: "Sofá 3 lugares", brand: "Móveis Becker", category: "Móveis", quantity: 1, unitPrice: 2500, discount: 300, taxes: 200, warranty: "36 meses" },
+      { sku: "MSA-MESA", barcode: "7891234560058", product: "Mesa de centro", brand: "Móveis Becker", category: "Móveis", quantity: 1, unitPrice: 700, discount: 0, taxes: 56, warranty: "12 meses" },
+    ],
+    paymentMethod: "credit_card", installments: 3, cardBrand: "Visa", cashback: 30, paymentStatus: "paid", total: 3200,
+  },
+  {
+    id: "s4", saleNumber: "V-2025-0004", date: "2025-05-05", store: "Lojas Becker - Online", seller: "E-commerce", cashier: "CX-WEB",
+      channel: "ecommerce", clientId: "c4", clientName: "Ana Martins",
+    items: [
+      { sku: "NB-DELL", barcode: "7891234560065", product: "Notebook Dell Inspiron", brand: "Dell", category: "Informática", quantity: 1, unitPrice: 4200, discount: 350, taxes: 336, warranty: "24 meses" },
+      { sku: "MN-24", barcode: "7891234560072", product: "Monitor 24\" Full HD", brand: "Dell", category: "Informática", quantity: 1, unitPrice: 900, discount: 0, taxes: 72, warranty: "12 meses" },
+      { sku: "M-KB", barcode: "7891234560089", product: "Teclado Mecânico", brand: "Logitech", category: "Informática", quantity: 1, unitPrice: 250, discount: 25, taxes: 20, warranty: "6 meses" },
+    ],
+    paymentMethod: "credit_card", installments: 10, cardBrand: "Mastercard", cashback: 90, paymentStatus: "paid", total: 5350,
+  },
+  {
+    id: "s5", saleNumber: "V-2025-0005", date: "2025-05-02", store: "Lojas Becker - Marketplace", seller: "Marketplace", cashier: "CX-MKT",
+      channel: "marketplace", clientId: "c5", clientName: "Pedro Lima",
+    items: [
+      { sku: "IP-16", barcode: "7891234560096", product: "iPhone 16 128GB", brand: "Apple", category: "Telefonia", quantity: 1, unitPrice: 5500, discount: 0, taxes: 440, warranty: "12 meses" },
+    ],
+    paymentMethod: "pix", installments: 1, cardBrand: "", pixKey: "pedro@exemplo.com", cashback: 110, paymentStatus: "paid", total: 5500,
+  },
+  {
+    id: "s6", saleNumber: "V-2025-0006", date: "2025-04-28", store: "Lojas Becker - Cerro Largo", seller: "Carlos Vendedor", cashier: "Caixa 02",
+      channel: "loja_fisica", clientId: "c1", clientName: "João Silva",
+    items: [
+      { sku: "M-LAV", barcode: "7891234560102", product: "Máquina de Lavar 12kg", brand: "LG", category: "Eletrodomésticos", quantity: 1, unitPrice: 2800, discount: 200, taxes: 224, warranty: "24 meses" },
+      { sku: "SEC-7", barcode: "7891234560119", product: "Secadora 7kg", brand: "LG", category: "Eletrodomésticos", quantity: 1, unitPrice: 2200, discount: 100, taxes: 176, warranty: "24 meses" },
+    ],
+    paymentMethod: "credit_card", installments: 4, cardBrand: "Visa", cashback: 50, paymentStatus: "paid", total: 5000,
+  },
+  {
+    id: "s7", saleNumber: "V-2025-0007", date: "2025-04-25", store: "Lojas Becker - Cerro Largo", seller: "Maria Atendente", cashier: "Caixa 01",
+      channel: "loja_fisica", clientId: "c3", clientName: "Carlos Pereira",
+    items: [
+      { sku: "FUR-COMP", barcode: "7891234560126", product: "Furadeira de Impacto", brand: "Bosch", category: "Ferramentas", quantity: 1, unitPrice: 350, discount: 0, taxes: 28, warranty: "12 meses" },
+      { sku: "TIN-18L", barcode: "7891234560133", product: "Tinta Acrílica 18L", brand: "Suvinil", category: "Materiais de Construção", quantity: 2, unitPrice: 180, discount: 20, taxes: 30, warranty: "—" },
+    ],
+    paymentMethod: "debit_card", installments: 1, cardBrand: "Elo", cashback: 0, paymentStatus: "paid", total: 710,
+  },
+];
+
 const DataContext = createContext<DataContextType | null>(null);
 
 export function DataProvider({ children }: { children: ReactNode }) {
@@ -64,6 +132,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [companies, setCompanies] = useState<Company[]>(defaultCompanies);
   const [deals, setDeals] = useState<Deal[]>(defaultDeals);
   const [tasks, setTasks] = useState<Task[]>(defaultTasks);
+  const [sales, setSales] = useState<Sale[]>(defaultSales);
 
   function addTask(title: string, relatedTo?: string) {
     const task: Task = {
@@ -85,7 +154,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <DataContext.Provider value={{ clients, companies, deals, tasks, setClients, setCompanies, setDeals, setTasks, addTask, toggleTask, deleteTask }}>
+    <DataContext.Provider value={{ clients, companies, deals, tasks, sales, setClients, setCompanies, setDeals, setTasks, setSales, addTask, toggleTask, deleteTask }}>
       {children}
     </DataContext.Provider>
   );
